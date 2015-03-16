@@ -9,12 +9,6 @@ var $ = require('gulp-load-plugins')({
 
 var reload = browserSync.reload;
 
-var config = {
-  app: './app',
-  dist: './dist',
-  tmp: './.tmp'
-};
-
 var autoprefixerConfig = {
   browsers: ['> 50%']
 };
@@ -24,7 +18,7 @@ var autoprefixerConfig = {
  * @return {object} stream
  */
 gulp.task('clean', function () {
-  return gulp.src([config.dist, config.tmp])
+  return gulp.src(['./dist', './tmp'])
     .pipe($.clean())
 });
 
@@ -33,8 +27,8 @@ gulp.task('clean', function () {
  * @return {object} stream
  */
 gulp.task('assets:dist', function () {
-  return gulp.src(config.app + '/assets/**/*')
-    .pipe(gulp.dest(config.dist + '/assets'));
+  return gulp.src('./app/assets/**/*')
+    .pipe(gulp.dest('./dist/assets'));
 });
 
 /**
@@ -44,7 +38,7 @@ gulp.task('assets:dist', function () {
 gulp.task('jade:dist', function () {
   var assets = $.useref.assets()
 
-  return gulp.src(config.app + '/**/*.jade')
+  return gulp.src('./app/**/*.jade')
     .pipe($.jade({
       pretty: true
     }))
@@ -64,8 +58,8 @@ gulp.task('jade:dist', function () {
 gulp.task('styles:dist', function (cb) {
   var filter = $.filter('**/*.styl');
   var src = [
-    config.app + '/styles/**/*.styl',
-    config.app + '/styles/**/*.css'
+    './app/styles/**/*.styl',
+    './app/styles/**/*.css'
   ];
 
   return gulp.src(src)
@@ -79,7 +73,7 @@ gulp.task('styles:dist', function (cb) {
     .pipe($.postcss([
       autoprefixer(autoprefixerConfig)
     ]))
-    .pipe(gulp.dest(config.dist + '/styles'));
+    .pipe(gulp.dest('./dist/styles'));
 });
 
 /**
@@ -87,7 +81,7 @@ gulp.task('styles:dist', function (cb) {
  * @return {object} stream
  */
 gulp.task('coffee:dist', function () {
-  var stream = gulp.src(config.app + '/scripts/**/*.coffee')
+  var stream = gulp.src('./app/scripts/**/*.coffee')
     .pipe($.coffee({
       bare: true
     }))
@@ -96,7 +90,7 @@ gulp.task('coffee:dist', function () {
     .pipe($.uglify())
     .pipe($.sourcemaps.init())
     .pipe($.sourcemaps.write())
-    .pipe(gulp.dest(config.dist + '/scripts'))
+    .pipe(gulp.dest('./dist/scripts'))
 });
 
 gulp.task('wiredep', function () {
@@ -123,15 +117,6 @@ gulp.task('imagemin:dist', function () {
     .pipe(gulp.dest('dist/assets/images'));
 });
 
-gulp.task('usemin:dist', function () {
-  gulp.src(config.dist + '/index.html')
-    .pipe($.usemin({
-      css: [$.minifyCss(), 'concat'],
-      js: [$.uglify(), $.rev()]
-    }))
-    .pipe(gulp.dest('dist'));
-});
-
 gulp.task('build', ['clean'], function () {
 
   gulp.start([
@@ -139,7 +124,6 @@ gulp.task('build', ['clean'], function () {
     'imagemin:dist',
     'wiredep',
     'jade:dist',
-    // 'usemin:dist',
     'styles:dist',
     'coffee:dist'
   ]);
