@@ -2,6 +2,7 @@ app = angular.module('myApp', [
   'ngCookies'
   'ngResource'
   'ngRoute'
+  'ngAnimate'
 ])
 
 app.run ($rootScope, PageFactory) ->

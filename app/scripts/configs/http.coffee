@@ -1,4 +1,6 @@
-app.config ($httpProvider) ->
+app.config ($httpProvider, $locationProvider) ->
+  $locationProvider.html5Mode(true)
+
   $httpProvider.defaults.useXDomain = true
   $httpProvider.defaults.headers.common['Access-Control-Allow-Origin']
 
