@@ -4,7 +4,7 @@
   "description": "Yeoman generator",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "nevech/generator-projects",
+  "repository": "nevech/generator-genlys",
   "author": {
     "name": "Ruslan Nevecherya",
     "email": "r.nevech@gmail.com",
