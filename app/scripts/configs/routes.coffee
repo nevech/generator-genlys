@@ -3,6 +3,6 @@ app.config ($routeProvider) ->
     .when '/',
       templateUrl: 'views/home.html'
       controller: 'HomeCtrl'
-      title: 'Home page'
+      title: 'Welcome'
     .otherwise
       redirectTo: '/'

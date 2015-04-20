@@ -2,22 +2,22 @@ doctype html
 html(ng-app="myApp")
   head
     base(href="/")
-    title(ng-bind="Page.getTitle()") myApp
+    title(ng-bind="Page.getTitle()")
 
     meta(charset="utf-8")
     meta(name="fragment" content="!")
     meta(name="viewport", content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0")
 
-
     //build:css styles/main.css
     //bower:css
     link(rel="stylesheet", href="/bower_components/normalize.css/normalize.css")
     //endbower
+
     link(rel="stylesheet", href="/styles/main.css")
     //endbuild
 
   body(ng-controller="GlobalCtrl")
-    div(ng-view)
+    div#wrapper(ng-view)
 
     //build:js scripts/main.js
     //bower:js
@@ -33,6 +33,7 @@ html(ng-app="myApp")
 
     script(src='scripts/configs/http.js')
     script(src='scripts/configs/routes.js')
+    script(src='scripts/configs/run.js')
 
     script(src='scripts/factories/page.js')
 

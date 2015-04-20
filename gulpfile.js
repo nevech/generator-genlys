@@ -23,7 +23,7 @@ var srcStyles = [
  */
 gulp.task('clean', function () {
   return gulp.src(['./dist', './.tmp'])
-    .pipe($.clean())
+    .pipe($.rimraf())
 });
 
 /**
@@ -121,7 +121,6 @@ gulp.task('styles:dist', function () {
     .pipe($.stylus({
       compress: true
     }))
-    .on('error', $.util.log)
     .pipe(filterStyl.restore())
     .pipe($.concat("main.min.css"))
     .pipe($.autoprefixer(autoprefixerConfig))
@@ -138,7 +137,10 @@ gulp.task('styles:serve', function () {
   return gulp.src(srcStyles)
     .pipe(filterStyl)
     .pipe($.stylus())
-    .on('error', $.util.log)
+    .on('error', function (err) {
+      $.util.log(err.message);
+      this.emit('end');
+    })
     .pipe(filterStyl.restore())
     .pipe($.autoprefixer(autoprefixerConfig))
     .pipe(gulp.dest('./.tmp/styles'))
