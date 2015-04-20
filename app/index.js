@@ -40,6 +40,10 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('gitignore', '.gitignore');
     },
 
+    robots: function () {
+      this.copy('robots.txt', 'robots.txt');
+    },
+
     app: function () {
       mkdirp('app');
       mkdirp('app/styles');
