@@ -44,6 +44,28 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('robots.txt', 'robots.txt');
     },
 
+    editorConfig: function () {
+      this.copy('editorconfig', '.editorconfig');
+    },
+
+    bower: function () {
+      this.fs.copyTpl(
+        this.templatePath('_bower.json'),
+        this.destinationPath('bower.json'),
+        this.options
+      );
+
+      this.copy('bowerrc', '.bowerrc');
+    },
+
+    packageJSON: function () {
+      this.fs.copyTpl(
+        this.templatePath('_package.json'),
+        this.destinationPath('package.json'),
+        this.options
+      );
+    },
+
     app: function () {
       mkdirp('app');
       mkdirp('app/styles');
@@ -56,21 +78,19 @@ module.exports = yeoman.generators.Base.extend({
       mkdirp('app/assets');
       mkdirp('app/assets/images');
       mkdirp('app/assets/fonts');
-
-      this.fs.copyTpl(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json'),
-        {appName: this.options.appName}
-      );
-
-      this.fs.copyTpl(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json'),
-        {appName: this.options.appName}
-      );
-
-      this.copy('bowerrc', '.bowerrc');
     },
+
+    scripts: function () {
+
+    },
+
+    views: function () {
+
+    },
+
+    styles: function () {
+
+    }
 
   },
 
