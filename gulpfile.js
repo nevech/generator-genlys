@@ -77,6 +77,8 @@ gulp.task('extras:serve', function () {
  * Compile jade to dist
  * @return {object} stream
  */
+var wiredep = require('wiredep').stream;
+
 gulp.task('jade:dist', function () {
   var assets = $.useref.assets()
 
@@ -85,6 +87,10 @@ gulp.task('jade:dist', function () {
       pretty: true
     }))
     .on('error', $.util.log)
+    .pipe(wiredep({
+      optional: 'configuration',
+      goes: 'here'
+    }))
     .pipe(assets)
     .pipe($.if('*.js', $.uglify(), $.rev() ))
     .pipe($.if('*.css', $.minifyCss()))
