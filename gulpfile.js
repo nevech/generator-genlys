@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
+var del = require('del');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
@@ -21,9 +22,11 @@ var srcStyles = [
  * Clean folder dist and tmp
  * @return {object} stream
  */
-gulp.task('clean', function () {
-  return gulp.src(['./dist', './.tmp'])
-    .pipe($.rimraf())
+gulp.task('clean', function (cb) {
+  del([
+    './dist',
+    './tmp'
+  ], cb);
 });
 
 /**
@@ -41,7 +44,7 @@ gulp.task('assets:dist', function () {
  */
 gulp.task('assets:serve', function () {
   return gulp.src('./app/assets/**/*')
-    .pipe(gulp.dest('./.tmp/assets'));
+    .pipe(gulp.dest('./tmp/assets'));
 });
 
 /**
@@ -67,7 +70,7 @@ gulp.task('extras:serve', function () {
     '!app/*.jade'
   ], {
     dot: true
-  }).pipe(gulp.dest('./.tmp'));
+  }).pipe(gulp.dest('./tmp'));
 });
 
 /**
@@ -106,7 +109,7 @@ gulp.task('jade:serve', function () {
       pretty: true
     }))
     .on('error', $.util.log)
-    .pipe(gulp.dest('./.tmp'));
+    .pipe(gulp.dest('./tmp'));
 });
 
 /**
@@ -143,7 +146,7 @@ gulp.task('styles:serve', function () {
     })
     .pipe(filterStyl.restore())
     .pipe($.autoprefixer(autoprefixerConfig))
-    .pipe(gulp.dest('./.tmp/styles'))
+    .pipe(gulp.dest('./tmp/styles'))
     .pipe(reload({stream: true}));
 });
 
@@ -173,7 +176,7 @@ gulp.task('coffee:serve', function () {
     .pipe($.coffee({
       bare: true
     }))
-    .pipe(gulp.dest('./.tmp/scripts'));
+    .pipe(gulp.dest('./tmp/scripts'));
 });
 
 /**
@@ -201,7 +204,7 @@ gulp.task('imagemin:serve', function () {
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest('./.tmp/assets/images'));
+    .pipe(gulp.dest('./tmp/assets/images'));
 });
 
 gulp.task('build', ['clean'], function () {
@@ -231,7 +234,7 @@ gulp.task('serve', ['clean'], function () {
     notify: false,
     port: 9000,
     server: {
-      baseDir: ['.tmp'],
+      baseDir: ['tmp'],
       routes: {
         '/bower_components': './app/bower_components'
       }
