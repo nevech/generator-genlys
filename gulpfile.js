@@ -160,7 +160,7 @@ gulp.task('styles:serve', function () {
  * Compile coffee to dist
  * @return {object} stream
  */
-gulp.task('coffee:dist', function () {
+gulp.task('scripts:dist', function () {
   return gulp.src('./app/scripts/**/*.coffee')
     .pipe($.coffee({
       bare: true
@@ -177,7 +177,7 @@ gulp.task('coffee:dist', function () {
  * Compile coffee to tmp
  * @return {object} stream
  */
-gulp.task('coffee:serve', function () {
+gulp.task('scripts:serve', function () {
   return gulp.src('./app/scripts/**/*.coffee')
     .pipe($.coffee({
       bare: true
@@ -221,7 +221,7 @@ gulp.task('build', ['clean'], function () {
     'imagemin:dist',
     'jade:dist',
     'styles:dist',
-    'coffee:dist'
+    'scripts:dist'
   ]);
 
 });
@@ -233,7 +233,7 @@ gulp.task('serve', ['clean'], function () {
     'imagemin:serve',
     'jade:serve',
     'styles:serve',
-    'coffee:serve'
+    'scripts:serve'
   ]);
 
   browserSync({
@@ -248,7 +248,7 @@ gulp.task('serve', ['clean'], function () {
   });
 
   gulp.watch('app/**/*.jade', ['jade:serve', reload]);
-  gulp.watch('app/scripts/**/*.coffee', ['coffee:serve', reload]);
+  gulp.watch('app/scripts/**/*.coffee', ['scripts:serve', reload]);
   gulp.watch('app/styles/**/*.styl', ['styles:serve']);
   gulp.watch('app/assets/**/*.*', ['assets:serve', 'imagemin:serve']);
   gulp.watch(['app/*.*', '!app/*.jade'], ['extras:serve']);
