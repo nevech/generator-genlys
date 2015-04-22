@@ -107,7 +107,7 @@ gulp.task('jade:dist', function () {
  * Compile jade to tmp
  * @return {object} stream
  */
-gulp.task('jade:serve', function () {
+gulp.task('views:dist', function () {
   var assets = $.useref.assets()
 
   return gulp.src('./app/**/*.jade')
@@ -231,7 +231,7 @@ gulp.task('serve', ['clean'], function () {
     'assets:serve',
     'extras:serve',
     'imagemin:serve',
-    'jade:serve',
+    'views:dist',
     'styles:serve',
     'scripts:serve'
   ]);
@@ -247,7 +247,7 @@ gulp.task('serve', ['clean'], function () {
     }
   });
 
-  gulp.watch('app/**/*.jade', ['jade:serve', reload]);
+  gulp.watch('app/**/*.jade', ['views:dist', reload]);
   gulp.watch('app/scripts/**/*.coffee', ['scripts:serve', reload]);
   gulp.watch('app/styles/**/*.styl', ['styles:serve']);
   gulp.watch('app/assets/**/*.*', ['assets:serve', 'imagemin:serve']);
