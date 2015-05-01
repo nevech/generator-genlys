@@ -34,7 +34,7 @@ gulp.task('extras', function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('./app/scripts/**/*.coffee')
+  return gulp.src('app/scripts/**/*.coffee')
     .pipe($.coffee({
       bare: true
     }))
@@ -51,6 +51,22 @@ gulp.task('config', ['scripts'], function () {
     .pipe(gulp.dest('dist/scripts/configs'))
 });
 
+gulp.task('styles', function () {
+  var filterStyl = $.filter('**/*.styl');
+
+  return gulp.src([
+      'app/styles/**/*.styl',
+      'app/styles/**/*.css'
+    ])
+    .pipe(filterStyl)
+    .pipe($.stylus())
+    .pipe(filterStyl.restore())
+    .pipe($.autoprefixer({
+      browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
+    }))
+    .pipe(gulp.dest('./dist/styles'));
+});
+
 gulp.task('build', ['clean'], function () {
   // Set env from args
   if (args.production) {
@@ -61,5 +77,6 @@ gulp.task('build', ['clean'], function () {
   gulp.start([
     'assets',
     'config',
+    'styles',
   ]);
 });

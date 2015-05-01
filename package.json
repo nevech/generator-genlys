@@ -13,7 +13,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "autoprefixer-core": "^5.1.7",
     "browser-sync": "^2.6.4",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
