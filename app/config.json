@@ -1,0 +1,8 @@
+{
+  "development": {
+    "apiHost": "https://api.development.com/"
+  },
+  "production": {
+    "apiHost": "https://api.production.com/"
+  }
+}

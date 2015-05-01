@@ -1,13 +1,17 @@
 {
   "name": "genlys",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Generator front-end",
+  "author": "Ruslan Nevecherya <r.nevech@gmail.com>",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/nevech/genlys"
+  },
+  "license": "MIT",
+  "main": "gulp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ruslan Nevecherya <r.nevech@gmail.com>",
-  "license": "ISC",
   "devDependencies": {
     "autoprefixer-core": "^5.1.7",
     "browser-sync": "^2.6.4",
@@ -27,6 +31,7 @@
     "gulp-minify-html": "^1.0.1",
     "gulp-newer": "^0.5.0",
     "gulp-ng-annotate": "^0.5.2",
+    "gulp-ng-config": "^1.2.0",
     "gulp-postcss": "^4.0.3",
     "gulp-rename": "^1.2.0",
     "gulp-rev": "^3.0.1",
@@ -36,6 +41,7 @@
     "gulp-usemin": "^0.3.11",
     "gulp-useref": "^1.1.1",
     "gulp-util": "^3.0.4",
-    "wiredep": "^2.2.2"
+    "wiredep": "^2.2.2",
+    "yargs": "^3.8.0"
   }
 }
