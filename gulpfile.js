@@ -21,7 +21,8 @@ gulp.task('clean', function (cb) {
 
 // Set env from arguments
 gulp.task('set:env', function (cb) {
-  var fs = require('fs'), args = require('yargs').argv;
+  var fs = require('fs'),
+    args = require('yargs').argv;
 
   fs.readFile('app/config.json', {encoding: 'utf-8'}, function (err, data) {
     var config = JSON.parse(data);
@@ -49,8 +50,10 @@ gulp.task('ngConfig', function () {
 });
 
 gulp.task('assets', function () {
-  return gulp.src('app/assets/**/*')
-    .pipe(gulp.dest(destDir + '/assets'));
+  return gulp.src([
+    'app/assets/**/*',
+    '!app/assets/images',
+  ]).pipe(gulp.dest(destDir + '/assets'));
 });
 
 gulp.task('extras', function () {
@@ -68,6 +71,16 @@ gulp.task('fonts', function () {
     filter: '**/*.{eot,svg,ttf,woff,woff2}'
   }).concat('app/assets/fonts/**/*'))
     .pipe(gulp.dest(destDir + '/assets/fonts'));
+});
+
+gulp.task('imagemin', function () {
+  return gulp.src('app/assets/images/**/*.{jpg,.png,.jpeg,.svg}')
+    .pipe($.imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest(destDir + '/assets/images'));
 });
 
 gulp.task('scripts', function () {
@@ -144,6 +157,7 @@ gulp.task('build', ['clean', 'set:env'], function () {
     'extras',
     'assets',
     'fonts',
+    'imagemin',
     'ngConfig',
     'compile'
   ], function () {
@@ -171,12 +185,12 @@ gulp.task('serve', ['clean', 'set:env'], function () {
     'extras',
     'assets',
     'fonts',
+    'imagemin',
     'jade',
     'scripts',
     'ngConfig',
     'styles',
-  ], function () {
-  });
+  ]);
 
   browserSync({
     notify: false,
@@ -193,10 +207,11 @@ gulp.task('serve', ['clean', 'set:env'], function () {
   gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
   gulp.watch('app/styles/**/*.styl', ['styles', reload({stream: true})]);
   gulp.watch('app/config.json', ['ngConfig', reload()]);
-  gulp.watch('app/config.json', ['ngConfig', reload()]);
+  gulp.watch('app/assets/images', ['imagemin', reload()]);
 
   gulp.watch([
     'app/assets/**/*',
+    '!app/assets/images',
   ], ['assets', reload]);
 
   gulp.watch([
