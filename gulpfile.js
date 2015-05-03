@@ -1,13 +1,12 @@
 var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
-var args = require('yargs').argv;
+
 var del = require('del');
 
 var reload = browserSync.reload;
 
 var env = process.env.NODE_ENV || 'development';
-var isProduction = false;
 var destDir = '.tmp';
 var appName = 'myApp';
 
@@ -16,19 +15,39 @@ var $ = require('gulp-load-plugins')({
   scope: ['dependencies', 'devDependencies']
 });
 
-function setENV () {
-  // Set env from args
-  if (args.production) {
-    isProduction = true;
-    env = 'production';
-  }
-}
-
 gulp.task('clean', function (cb) {
   del(['dist', '.tmp'], cb);
 });
 
-gulp.task('assets', function () {
+// Set env from arguments
+gulp.task('set:env', function (cb) {
+  var fs = require('fs'), args = require('yargs').argv;
+
+  fs.readFile('app/config.json', {encoding: 'utf-8'}, function (err, data) {
+    var config = JSON.parse(data);
+    var envs = Object.keys(config);
+
+    for (var i = 0, l = envs.length; i < l; i++) {
+      if (args[envs[i]]) {
+        env = envs[i];
+        break;
+      }
+    }
+
+    cb();
+  });
+
+});
+
+gulp.task('ngConfig', function () {
+  return gulp.src('app/config.json')
+    .pipe($.ngConfig(appName + '.config', {
+      environment: env
+    }))
+    .pipe(gulp.dest('.tmp/scripts/configs'))
+});
+
+gulp.task('assets', ['fonts'], function () {
   return gulp.src('app/assets/**/*')
     .pipe(gulp.dest(destDir + '/assets'));
 });
@@ -46,19 +65,11 @@ gulp.task('extras', function () {
 gulp.task('fonts', function () {
   return gulp.src(require('main-bower-files')({
     filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/assets/fonts//**/*'))
+  }).concat('app/assets/fonts/**/*'))
     .pipe(gulp.dest(destDir + '/assets/fonts'));
 });
 
-gulp.task('config', function () {
-  return gulp.src('app/config.json')
-    .pipe($.ngConfig(appName + '.config', {
-      environment: env
-    }))
-    .pipe(gulp.dest('./.tmp/scripts/configs'))
-});
-
-gulp.task('scripts', ['config'], function () {
+gulp.task('scripts', ['ngConfig'], function () {
   var filterCoffee = $.filter('**/*.coffee');
 
   return gulp.src([
@@ -71,8 +82,7 @@ gulp.task('scripts', ['config'], function () {
     }))
     .pipe(filterCoffee.restore())
     .pipe($.ngAnnotate())
-    .pipe($.if(isProduction, $.uglify().on('error', $.util.log)))
-    .pipe(gulp.dest('./.tmp/scripts'));
+    .pipe(gulp.dest('.tmp/scripts'));
 });
 
 gulp.task('styles', function () {
@@ -88,7 +98,7 @@ gulp.task('styles', function () {
     .pipe($.autoprefixer({
       browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
     }))
-    .pipe(gulp.dest('./.tmp/styles'));
+    .pipe(gulp.dest('.tmp/styles'));
 });
 
 gulp.task('wiredep', function () {
@@ -106,7 +116,7 @@ gulp.task('jade', ['wiredep'], function () {
       pretty: true
     }))
     .on('error', $.util.log)
-    .pipe(gulp.dest('./.tmp'));
+    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('compile', ['jade', 'scripts', 'styles'], function () {
@@ -123,11 +133,10 @@ gulp.task('compile', ['jade', 'scripts', 'styles'], function () {
       spare: true
     }))
     .pipe($.revReplace())
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['clean'], function () {
-  setENV();
+gulp.task('build', ['clean', 'set:env'], function () {
   destDir = 'dist';
 
   gulp.start([
@@ -153,8 +162,7 @@ gulp.task('serve:dist', function () {
   });
 });
 
-gulp.task('serve', ['clean'], function () {
-  setENV();
+gulp.task('serve', ['clean', 'set:env'], function () {
 
   gulp.start([
     'assets',
