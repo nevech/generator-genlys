@@ -7,8 +7,8 @@ var del = require('del');
 var reload = browserSync.reload;
 
 var env = process.env.NODE_ENV || 'development';
-var destDir = '.tmp';
 var appName = 'myApp';
+var destDir = '.tmp';
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
@@ -41,13 +41,14 @@ gulp.task('set:env', function (cb) {
 
 gulp.task('ngConfig', function () {
   return gulp.src('app/config.json')
-    .pipe($.ngConfig(appName + '.config', {
+    .pipe($.ngConfig(appName, {
+      createModule: false,
       environment: env
     }))
     .pipe(gulp.dest('.tmp/scripts/configs'))
 });
 
-gulp.task('assets', ['fonts'], function () {
+gulp.task('assets', function () {
   return gulp.src('app/assets/**/*')
     .pipe(gulp.dest(destDir + '/assets'));
 });
@@ -69,7 +70,7 @@ gulp.task('fonts', function () {
     .pipe(gulp.dest(destDir + '/assets/fonts'));
 });
 
-gulp.task('scripts', ['ngConfig'], function () {
+gulp.task('scripts', function () {
   var filterCoffee = $.filter('**/*.coffee');
 
   return gulp.src([
@@ -140,8 +141,10 @@ gulp.task('build', ['clean', 'set:env'], function () {
   destDir = 'dist';
 
   gulp.start([
-    'assets',
     'extras',
+    'assets',
+    'fonts',
+    'ngConfig',
     'compile'
   ], function () {
     del('.tmp');
@@ -165,14 +168,42 @@ gulp.task('serve:dist', function () {
 gulp.task('serve', ['clean', 'set:env'], function () {
 
   gulp.start([
-    'assets',
     'extras',
+    'assets',
+    'fonts',
     'jade',
     'scripts',
+    'ngConfig',
     'styles',
   ], function () {
-
   });
+
+  browserSync({
+    notify: false,
+    port: 9000,
+    server: {
+      baseDir: ['.tmp'],
+      routes: {
+        '/bower_components': 'bower_components'
+      }
+    }
+  });
+
+  gulp.watch('app/*.jade', ['jade', reload]);
+  gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
+  gulp.watch('app/styles/**/*.styl', ['styles', reload({stream: true})]);
+  gulp.watch('app/config.json', ['ngConfig', reload()]);
+  gulp.watch('app/config.json', ['ngConfig', reload()]);
+
+  gulp.watch([
+    'app/assets/**/*',
+  ], ['assets', reload]);
+
+  gulp.watch([
+    'app/*.*',
+    '!app/*.jade',
+    '!app/config.json',
+  ], ['extras', reload()]);
 
 });
 
