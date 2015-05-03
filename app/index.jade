@@ -8,36 +8,36 @@ html(ng-app="myApp")
     meta(name="fragment" content="!")
     meta(name="viewport", content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0")
 
-    //bower:css
-    link(rel="stylesheet", href="/bower_components/normalize.css/normalize.css")
-    //endbower
+    // bower:css
+    link(rel='stylesheet', href='/bower_components/normalize.css/normalize.css')
+    // endbower
 
-    //build:css styles/main.css
+    // build:css styles/main.css
     link(rel="stylesheet", href="/styles/main.css")
-    //endbuild
+    link(rel="stylesheet", href="/styles/home.css")
+    // endbuild
 
   body(ng-controller="GlobalCtrl")
     div#wrapper(ng-view)
 
-    //bower:js
-    script(src='bower_components/angular/angular.js')
-    script(src='bower_components/angular-animate/angular-animate.js')
-    script(src='bower_components/angular-resource/angular-resource.js')
-    script(src='bower_components/angular-cookies/angular-cookies.js')
-    script(src='bower_components/angular-route/angular-route.js')
-    script(src='bower_components/underscore/underscore.js')
-    //endbower
+    // bower:js
+    script(src='/bower_components/angular/angular.js')
+    script(src='/bower_components/angular-animate/angular-animate.js')
+    script(src='/bower_components/angular-resource/angular-resource.js')
+    script(src='/bower_components/angular-cookies/angular-cookies.js')
+    script(src='/bower_components/angular-route/angular-route.js')
+    script(src='/bower_components/underscore/underscore.js')
+    // endbower
 
-    //build:js scripts/main.js
+    // build:js scripts/main.js
+    script(src='/scripts/app.js')
 
-    script(src='scripts/app.js')
+    script(src='/scripts/configs/http.js')
+    script(src='/scripts/configs/routes.js')
+    script(src='/scripts/configs/run.js')
 
-    script(src='scripts/configs/http.js')
-    script(src='scripts/configs/routes.js')
-    script(src='scripts/configs/run.js')
+    script(src='/scripts/factories/page.js')
 
-    script(src='scripts/factories/page.js')
-
-    script(src='scripts/controllers/global.js')
-    script(src='scripts/controllers/home.js')
-    //endbuild
+    script(src='/scripts/controllers/global.js')
+    script(src='/scripts/controllers/home.js')
+    // endbuild

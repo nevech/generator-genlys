@@ -4,8 +4,8 @@
   "description": "Generator front-end",
   "author": "Ruslan Nevecherya <r.nevech@gmail.com>",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/nevech/genlys"
+    "type": "git",
+    "url": "https://github.com/nevech/genlys"
   },
   "license": "MIT",
   "main": "gulp.js",
@@ -34,12 +34,14 @@
     "gulp-postcss": "^4.0.3",
     "gulp-rename": "^1.2.0",
     "gulp-rev": "^3.0.1",
+    "gulp-rev-replace": "^0.4.0",
     "gulp-sourcemaps": "^1.5.0",
     "gulp-stylus": "^2.0.1",
     "gulp-uglify": "^1.1.0",
     "gulp-usemin": "^0.3.11",
     "gulp-useref": "^1.1.1",
     "gulp-util": "^3.0.4",
+    "main-bower-files": "^2.7.0",
     "wiredep": "^2.2.2",
     "yargs": "^3.8.0"
   }
