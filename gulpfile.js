@@ -112,7 +112,8 @@ gulp.task('styles', function () {
     .pipe($.autoprefixer({
       browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
     }))
-    .pipe(gulp.dest('.tmp/styles'));
+    .pipe(gulp.dest('.tmp/styles'))
+    .pipe(reload({stream: true}));
 });
 
 gulp.task('wiredep', function () {
@@ -205,9 +206,10 @@ gulp.task('serve', ['clean', 'set:env'], function () {
 
   gulp.watch('app/*.jade', ['jade', reload]);
   gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
-  gulp.watch('app/styles/**/*.styl', ['styles', reload({stream: true})]);
-  gulp.watch('app/config.json', ['ngConfig', reload()]);
-  gulp.watch('app/assets/images', ['imagemin', reload()]);
+  gulp.watch('app/styles/**/*.styl', ['styles']);
+  gulp.watch('app/assets/images', ['imagemin', reload]);
+  gulp.watch('app/config.json', ['ngConfig', reload]);
+  gulp.watch('bower.json', ['wiredep', reload]);
 
   gulp.watch([
     'app/assets/**/*',
