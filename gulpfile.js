@@ -173,9 +173,6 @@ gulp.task('serve:dist', function () {
     port: 9000,
     server: {
       baseDir: ['dist'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
     }
   });
 });
