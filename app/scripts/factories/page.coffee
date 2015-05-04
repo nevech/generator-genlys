@@ -3,6 +3,6 @@ app.factory 'PageFactory', ->
 
   @getTitle = -> title
 
-  @setTitle = (_t) -> title = _t
+  @setTitle = (_title) -> title = _title
 
   return this
