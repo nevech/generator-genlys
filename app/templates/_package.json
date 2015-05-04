@@ -1,5 +1,5 @@
 {
-  "name": "<%= appName %>",
-  "version": "0.0.0",
+  "name": "<%= appNameSlugify %>",
+  "version": "0.0.1",
   "dependencies": {}
 }

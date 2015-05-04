@@ -1,33 +1,26 @@
 # generator-genlys [![Build Status](https://secure.travis-ci.org/nevech/generator-genlys.png?branch=master)](https://travis-ci.org/nevech/generator-genlys)
 
-> Offers you a Yeoman generator to initiate a Web application with Angular powered by GulpJS.
+> Yeoman generator a front-end Web App with Angular powered by Gulp.
 
 ![](http://i.imgur.com/BTrI11y.png)
-## Usage
+## Features
+Please see our [gulpfile.js](https://github.com/nevech/generator-genlys/blob/master/app/templates/gulpfile.js) for information on what we support.
 
-### Create your project
+* MVC project structure
+* Includes basic dependence for Angular
+* Dynamically create configuration file for angular from config.json, using NODE_ENV or arguments from the console.
+* Automagically compile [Jade](jade-lang.com), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
+* Automagically wire-up dependencies installed with [Bower](http://bower.io/)
+* Built-in preview server with [BrowserSync](http://www.browsersync.io/)
+* CSS Autoprefixing
+* Awesome image optimization
 
-Install the required tools: `yo`, `gulp`, `bower`
-```
-npm install -g yo gulp bower
-```
+## Getting Started
 
-Install `generator-genlys`:
-```
-npm install -g generator-genlys
-```
+* Install dependencies: `npm install -g yo bower`
+* Install the generator: `npm install -g generator-genlys`
 
-Make a new directory, and `cd` into it:
-```
-mkdir my-app && cd $_
-```
-
-Run `yo genlys`:
-```
-yo genlys
-```
 
 
 ## License
-
-MIT
+BSD license

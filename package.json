@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "mkdirp": "^0.5.0",
-    "mocha": "*"
+    "mocha": "*",
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.0.3"
   }
 }
