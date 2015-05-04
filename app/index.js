@@ -48,10 +48,6 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('gitignore', '.gitignore');
     },
 
-    robots: function () {
-      this.copy('robots.txt', 'app/robots.txt');
-    },
-
     editorConfig: function () {
       this.copy('editorconfig', '.editorconfig');
     },
@@ -100,6 +96,8 @@ module.exports = yeoman.generators.Base.extend({
       mkdirp('app/assets');
       mkdirp('app/assets/images');
       mkdirp('app/assets/fonts');
+
+      this.copy('robots.txt', 'app/robots.txt');
     },
 
     scripts: function () {
