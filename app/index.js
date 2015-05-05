@@ -32,7 +32,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (answers) {
       this.options = answers;
-      this.options.appNameSlugify = s.slugify(answers.appName);
+      this.options.appName = s.slugify(answers.appName);
 
       done();
     }.bind(this));
@@ -54,7 +54,7 @@ module.exports = yeoman.generators.Base.extend({
 
     bower: function () {
       var bower = {
-        name: this.options.appNameSlugify,
+        name: this.options.appName,
         private: true,
         version: '0.0.1'
         dependencies: {
@@ -93,7 +93,6 @@ module.exports = yeoman.generators.Base.extend({
       mkdirp('app/scripts/services');
       mkdirp('app/scripts/factories');
       mkdirp('app/scripts/directives');
-      mkdirp('app/assets');
       mkdirp('app/assets/images');
       mkdirp('app/assets/fonts');
 
@@ -116,5 +115,9 @@ module.exports = yeoman.generators.Base.extend({
 
   install: function () {
     this.installDependencies();
+  },
+
+  end: function () {
+    this.log('Your project is generated! ' + chalk.green('Heppy working'));
   }
 });

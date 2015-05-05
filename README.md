@@ -4,23 +4,25 @@
 
 ![](http://i.imgur.com/BTrI11y.png)
 ## Features
-Please see our [gulpfile.js](https://github.com/nevech/generator-genlys/blob/master/app/templates/gulpfile.js) for information on what we support.
+Look at [gulpfile.js](https://github.com/nevech/generator-genlys/blob/master/app/templates/gulpfile.js) to see detailed information about supported features.
 
 * MVC project structure
 * Includes basic dependence for Angular
-* Dynamically create configuration file for angular from config.json, using NODE_ENV or arguments from the console.
-* Automagically compile [Jade](jade-lang.com), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
-* Automagically wire-up dependencies installed with [Bower](http://bower.io/)
+* Dynamically creates configuration file for angular from config.json using NODE_ENV or arguments from the console.
+* Automatically compile [Jade](jade-lang.com), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
+* Automatically wire-up dependencies installed with [Bower](http://bower.io/)
 * Built-in preview server with [BrowserSync](http://www.browsersync.io/)
 * CSS Autoprefixing
 * Awesome image optimization
 
-## Getting Started
+
+## Installation
 
 * Install dependencies: `npm install -g yo bower`
 * Install the generator: `npm install -g generator-genlys`
 
-
+## Documentation
+* [Getting Started](https://github.com/nevech/generator-genlys/blob/master/docs/README.md)
 
 ## License
-BSD license
+MIT license
