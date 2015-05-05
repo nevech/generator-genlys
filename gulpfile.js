@@ -217,7 +217,7 @@ gulp.task('serve', ['clean', 'set:env'], function () {
     'app/*.*',
     '!app/*.jade',
     '!app/config.json',
-  ], ['extras', reload()]);
+  ], ['extras', reload]);
 
 });
 
