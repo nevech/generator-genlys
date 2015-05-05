@@ -1,12 +1,13 @@
 var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
-
 var del = require('del');
+var gulpsync = require('gulp-sync')(gulp);
 
 var reload = browserSync.reload;
 
 var env = process.env.NODE_ENV || 'development';
+var port = process.env.PORT || 9000;
 var appName = 'myApp';
 var destDir = '.tmp';
 
@@ -38,6 +39,10 @@ gulp.task('set:env', function (cb) {
     cb();
   });
 
+});
+
+gulp.task('init:workflow', ['clean', 'set:env'], function (cb) {
+  cb();
 });
 
 gulp.task('ngConfig', function () {
@@ -134,7 +139,7 @@ gulp.task('jade', ['wiredep'], function () {
     .pipe(gulp.dest('.tmp'));
 });
 
-gulp.task('compile', ['jade', 'scripts', 'styles'], function () {
+gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
   var assets = $.useref.assets({searchPath: ['.', '.tmp']});
 
   return gulp.src('.tmp/**/*.html')
@@ -151,48 +156,25 @@ gulp.task('compile', ['jade', 'scripts', 'styles'], function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['clean', 'set:env'], function () {
-  destDir = 'dist';
+var compileServeTasks = [
+  'extras',
+  'assets',
+  'fonts',
+  'imagemin',
+  'jade',
+  'scripts',
+  'ngConfig',
+  'styles',
+];
 
-  gulp.start([
-    'extras',
-    'assets',
-    'fonts',
-    'imagemin',
-    'ngConfig',
-    'compile'
-  ], function () {
-    del('.tmp');
-  });
-
+gulp.task('compile:serve', gulpsync.sync(['clean', 'set:env', compileServeTasks]), function (cb) {
+  cb();
 });
 
-gulp.task('serve:dist', function () {
+gulp.task('serve', ['compile:serve'], function () {
   browserSync({
     notify: false,
-    port: 9000,
-    server: {
-      baseDir: ['dist'],
-    }
-  });
-});
-
-gulp.task('serve', ['clean', 'set:env'], function () {
-
-  gulp.start([
-    'extras',
-    'assets',
-    'fonts',
-    'imagemin',
-    'jade',
-    'scripts',
-    'ngConfig',
-    'styles',
-  ]);
-
-  browserSync({
-    notify: false,
-    port: 9000,
+    port: port,
     server: {
       baseDir: ['.tmp'],
       routes: {
@@ -201,7 +183,7 @@ gulp.task('serve', ['clean', 'set:env'], function () {
     }
   });
 
-  gulp.watch('app/*.jade', ['jade', reload]);
+  gulp.watch('app/**/*.jade', ['jade', reload]);
   gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
   gulp.watch('app/styles/**/*.styl', ['styles']);
   gulp.watch('app/assets/images', ['imagemin', reload]);
@@ -219,6 +201,32 @@ gulp.task('serve', ['clean', 'set:env'], function () {
     '!app/config.json',
   ], ['extras', reload]);
 
+});
+
+gulp.task('build', ['init:workflow'], function () {
+  destDir = 'dist';
+
+  gulp.start([
+    'extras',
+    'assets',
+    'fonts',
+    'imagemin',
+    'ngConfig',
+    'compile:dist'
+  ], function () {
+    del('.tmp');
+  });
+
+});
+
+gulp.task('serve:dist', function () {
+  browserSync({
+    notify: false,
+    port: port,
+    server: {
+      baseDir: ['dist'],
+    }
+  });
 });
 
 gulp.task('default', ['build']);
