@@ -15,6 +15,8 @@ yo genlys
 ```
 
 ## Project structure
+After generating your project will have the following structure:
+
 ```
 app
 ├── assets
