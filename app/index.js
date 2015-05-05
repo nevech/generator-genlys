@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var mkdirp = require('mkdirp');
 var _ = require('underscore');
-var s = require("underscore.string");
+var s = require('underscore.string');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
