@@ -17,7 +17,13 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "web",
+    "front-end",
+    "jade",
+    "stylus",
+    "coffee",
+    "gulp"
   ],
   "dependencies": {
     "yeoman-generator": "^0.19.0",
