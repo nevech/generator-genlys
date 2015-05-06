@@ -1,7 +1,7 @@
 {
   "name": "generator-genlys",
   "version": "0.0.1",
-  "description": "Yeoman generator",
+  "description": "Yeoman generator genlys",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "nevech/generator-genlys",
