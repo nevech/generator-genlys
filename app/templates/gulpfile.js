@@ -1,3 +1,6 @@
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+'use strict';
+
 var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
@@ -8,7 +11,7 @@ var reload = browserSync.reload;
 
 var env = process.env.NODE_ENV || 'development';
 var port = process.env.PORT || 9000;
-var appName = 'myApp';
+var appName = '<%= options.appName %>';
 var destDir = '.tmp';
 
 var $ = require('gulp-load-plugins')({

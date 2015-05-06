@@ -22,7 +22,7 @@ module.exports = yeoman.generators.Base.extend({
       type: 'input',
       name: 'appName',
       message: 'Enter project name',
-      default: 'my-app'
+      default: 'myApp'
     }, {
       type: 'confirm',
       name: 'includeUnderscore',
@@ -32,7 +32,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (answers) {
       this.options = answers;
-      this.options.appName = s.slugify(answers.appName);
+      this.options.appName = s.camelize(answers.appName);
 
       done();
     }.bind(this));
@@ -52,11 +52,15 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('editorconfig', '.editorconfig');
     },
 
+    readme: function () {
+      this.copy('_README.md', 'README.md');
+    },
+
     bower: function () {
       var bower = {
         name: this.options.appName,
         private: true,
-        version: '0.0.1'
+        version: '0.0.1',
         dependencies: {
           'angular': '^1.3.1',
           'angular-resource': '^1.3.1',
@@ -86,29 +90,26 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     app: function () {
-      mkdirp('app/styles');
+      mkdirp('app/assets/fonts');
+      mkdirp('app/assets/images');
       mkdirp('app/scripts');
-      mkdirp('app/scripts/config');
+      mkdirp('app/scripts/configs');
       mkdirp('app/scripts/controllers');
       mkdirp('app/scripts/services');
       mkdirp('app/scripts/factories');
+      mkdirp('app/scripts/filters');
       mkdirp('app/scripts/directives');
-      mkdirp('app/assets/images');
-      mkdirp('app/assets/fonts');
+      mkdirp('app/styles');
+      mkdirp('app/views');
+
+      this.directory('assets', 'app/assets');
+      this.directory('scripts', 'app/scripts');
+      this.directory('styles', 'app/styles');
+      this.directory('views', 'app/views');
+      this.copy('index.jade', 'app/index.jade');
 
       this.copy('robots.txt', 'app/robots.txt');
-    },
-
-    scripts: function () {
-
-    },
-
-    views: function () {
-
-    },
-
-    styles: function () {
-
+      this.copy('config.json', 'app/config.json');
     }
 
   },
@@ -118,6 +119,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   end: function () {
-    this.log('Your project is generated! ' + chalk.green('Heppy working'));
+    this.log(chalk.yellow('Your project is generated! Happy working :)'));
+    this.log('Run ' + chalk.green('gulp serve') + ' for start developments');
   }
 });
