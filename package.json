@@ -28,6 +28,6 @@
     "underscore.string": "^3.0.3"
   },
   "devDependencies": {
-    "mocha": "*",
+    "mocha": "*"
   }
 }
