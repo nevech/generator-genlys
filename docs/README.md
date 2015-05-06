@@ -19,29 +19,29 @@ After generating your project will have the following structure:
 
 ```
 app
-├── assets
-├──── fonts
-├──── images
-├── scripts
-├──── configs
-├────── http.coffee
-├────── routes.coffee
-├────── run.coffee
-├──── controllers
-├────── global.coffee
-├────── home.coffee
-├──── directives
-├──── factories
-├────── page.coffee
-├──── services
-├──── app.coffee
-├── styles
-├─── main.styl
-├── views
-├──── home.jade
-├── config.json
-├── robots.txt
-└── index.jade
+├─── assets
+│  ├─── fonts
+│  └─── images
+├─── scripts
+│  ├── configs
+│  │  ├─── http.coffee
+│  │  ├─── routes.coffee
+│  │  └─── run.coffee
+│  ├─── controllers
+│  │  ├─── global.coffee
+│  │  └─── home.coffee
+│  ├─── directives
+│  ├─── factories
+│  │  └─── page.coffee
+│  ├─── services
+│  ├─── app.coffee
+├─── styles
+│  ├─── main.styl
+├─── views
+│  ├─── home.jade
+├─── config.json
+├─── robots.txt
+└─── index.jade
 ```
 
 ## General tasks
