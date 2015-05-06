@@ -41,10 +41,6 @@ gulp.task('set:env', function (cb) {
 
 });
 
-gulp.task('init:workflow', ['clean', 'set:env'], function (cb) {
-  cb();
-});
-
 gulp.task('ngConfig', function () {
   return gulp.src('app/config.json')
     .pipe($.ngConfig(appName, {
@@ -156,7 +152,7 @@ gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
     .pipe(gulp.dest('dist'));
 });
 
-var compileServeTasks = [
+var serveTasks = [
   'extras',
   'assets',
   'fonts',
@@ -167,11 +163,7 @@ var compileServeTasks = [
   'styles',
 ];
 
-gulp.task('compile:serve', gulpsync.sync(['clean', 'set:env', compileServeTasks]), function (cb) {
-  cb();
-});
-
-gulp.task('serve', ['compile:serve'], function () {
+gulp.task('serve', gulpsync.sync(['clean', 'set:env', serveTasks]), function () {
   browserSync({
     notify: false,
     port: port,
@@ -203,7 +195,7 @@ gulp.task('serve', ['compile:serve'], function () {
 
 });
 
-gulp.task('build', ['init:workflow'], function () {
+gulp.task('build', ['clean', 'set:env'], function () {
   destDir = 'dist';
 
   gulp.start([
