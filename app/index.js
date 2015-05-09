@@ -106,10 +106,10 @@ module.exports = yeoman.generators.Base.extend({
       this.directory('scripts', 'app/scripts');
       this.directory('styles', 'app/styles');
       this.directory('views', 'app/views');
-      this.copy('index.jade', 'app/index.jade');
 
-      this.copy('robots.txt', 'app/public/robots.txt');
+      this.copy('index.jade', 'app/index.jade');
       this.copy('config.json', 'app/config.json');
+      this.copy('robots.txt', 'app/public/robots.txt');
     }
 
   },
