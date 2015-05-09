@@ -67,9 +67,6 @@ If you want to check your build run:
 gulp serve:dist
 ```
 
-**Public dir**
-All files in `app/public` directory are copied to the root of the build (`dist`).
-
 ## Configs
 After run `gulp serve` or `gulp build` file `app/configs/config.js` will be created. This file contains constants for your `angular.module`.
 Constants are generated depending on your NODE_ENV (default: `development`). Constants gets from file `app/config.json`.
@@ -87,3 +84,7 @@ gulp build --production
 ```
 
 You can also add your own ENV to `app/config.json` and use. For more info about configs see: [gulp-ng-config](https://www.npmjs.com/package/gulp-ng-config)
+
+## Public directory
+
+All files in `app/public` directory are copied to the root of the build (`dist`).
