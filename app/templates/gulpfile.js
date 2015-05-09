@@ -1,247 +1,227 @@
-var gulp = require('gulp');
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+'use strict';
+
 var browserSync = require('browser-sync');
+var wiredep = require('wiredep').stream;
+var gulp = require('gulp');
+var del = require('del');
+var gulpsync = require('gulp-sync')(gulp);
+
+var reload = browserSync.reload;
+
+var env = process.env.NODE_ENV || 'development';
+var port = process.env.PORT || 9000;
+var appName = '<%= options.appName %>';
+var destDir = '.tmp';
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
   scope: ['dependencies', 'devDependencies']
 });
 
-var reload = browserSync.reload;
-
-var autoprefixerConfig = {
-  browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
-};
-
-var srcStyles = [
-  './app/styles/**/*.styl',
-  './app/styles/**/*.css'
-];
-
-/**
- * Clean folder dist and tmp
- * @return {object} stream
- */
-gulp.task('clean', function () {
-  return gulp.src(['./dist', './.tmp'])
-    .pipe($.rimraf())
+gulp.task('clean', function (cb) {
+  del(['dist', '.tmp'], cb);
 });
 
-/**
- * Copy assets to dist
- * @return {object} stream
- */
-gulp.task('assets:dist', function () {
-  return gulp.src('./app/assets/**/*')
-    .pipe(gulp.dest('./dist/assets'));
+// Set env from arguments
+gulp.task('set:env', function (cb) {
+  var fs = require('fs'),
+    args = require('yargs').argv;
+
+  fs.readFile('app/config.json', {encoding: 'utf-8'}, function (err, data) {
+    var config = JSON.parse(data);
+    var envs = Object.keys(config);
+
+    for (var i = 0, l = envs.length; i < l; i++) {
+      if (args[envs[i]]) {
+        env = envs[i];
+        break;
+      }
+    }
+
+    cb();
+  });
+
 });
 
-/**
- * Copy assets to tmp
- * @return {object} stream
- */
-gulp.task('assets:serve', function () {
-  return gulp.src('./app/assets/**/*')
-    .pipe(gulp.dest('./.tmp/assets'));
+gulp.task('ngConfig', function () {
+  return gulp.src('app/config.json')
+    .pipe($.ngConfig(appName, {
+      createModule: false,
+      environment: env
+    }))
+    .pipe(gulp.dest('.tmp/scripts/configs'))
 });
 
-/**
- * Copy extra files to dist
- * @return {object} stream
- */
-gulp.task('extras:dist', function () {
+gulp.task('assets', function () {
+  return gulp.src([
+    'app/assets/**/*',
+    '!app/assets/images',
+  ]).pipe(gulp.dest(destDir + '/assets'));
+});
+
+gulp.task('extras', function () {
   gulp.src([
     'app/*.*',
-    '!app/*.jade'
+    '!app/*.jade',
+    '!app/config.json',
   ], {
     dot: true
-  }).pipe(gulp.dest('./dist'));
+  }).pipe(gulp.dest(destDir));
 });
 
-/**
- * Copy extra files to tmp
- * @return {object} stream
- */
-gulp.task('extras:serve', function () {
-  gulp.src([
-    'app/*.*',
-    '!app/*.jade'
-  ], {
-    dot: true
-  }).pipe(gulp.dest('./.tmp'));
+gulp.task('fonts', function () {
+  return gulp.src(require('main-bower-files')({
+    filter: '**/*.{eot,svg,ttf,woff,woff2}'
+  }).concat('app/assets/fonts/**/*'))
+    .pipe(gulp.dest(destDir + '/assets/fonts'));
 });
 
-/**
- * Compile jade to dist
- * @return {object} stream
- */
-gulp.task('jade:dist', function () {
-  var assets = $.useref.assets()
+gulp.task('imagemin', function () {
+  return gulp.src('app/assets/images/**/*.{jpg,.png,.jpeg,.svg}')
+    .pipe($.imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest(destDir + '/assets/images'));
+});
 
-  return gulp.src('./app/**/*.jade')
+gulp.task('scripts', function () {
+  var filterCoffee = $.filter('**/*.coffee');
+
+  return gulp.src([
+      'app/scripts/**/*.coffee',
+      'app/scripts/**/*.js'
+    ])
+    .pipe(filterCoffee)
+    .pipe($.coffee({
+      bare: true
+    }))
+    .pipe(filterCoffee.restore())
+    .pipe($.ngAnnotate())
+    .pipe(gulp.dest('.tmp/scripts'));
+});
+
+gulp.task('styles', function () {
+  var filterStyl = $.filter('**/*.styl');
+
+  return gulp.src([
+      'app/styles/**/*.styl',
+      'app/styles/**/*.css'
+    ])
+    .pipe(filterStyl)
+    .pipe($.stylus())
+    .pipe(filterStyl.restore())
+    .pipe($.autoprefixer({
+      browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
+    }))
+    .pipe(gulp.dest('.tmp/styles'))
+    .pipe(reload({stream: true}));
+});
+
+gulp.task('wiredep', function () {
+  return gulp.src('app/index.jade')
+    .pipe(wiredep({
+      directory: './bower_components',
+      ignorePath: /^(\.\.\/)*\.\./
+    }))
+    .pipe(gulp.dest('app'));
+});
+
+gulp.task('jade', ['wiredep'], function () {
+  return gulp.src('app/**/*.jade')
     .pipe($.jade({
       pretty: true
     }))
     .on('error', $.util.log)
+    .pipe(gulp.dest('.tmp'));
+});
+
+gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
+  var assets = $.useref.assets({searchPath: ['.', '.tmp']});
+
+  return gulp.src('.tmp/**/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify(), $.rev() ))
-    .pipe($.if('*.css', $.minifyCss()))
+    .pipe($.if('*.css', $.minifyCss(), $.rev()))
     .pipe(assets.restore())
     .pipe($.useref())
     .pipe($.minifyHtml({
       empty: true,
       spare: true
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe($.revReplace())
+    .pipe(gulp.dest('dist'));
 });
 
-/**
- * Compile jade to tmp
- * @return {object} stream
- */
-gulp.task('jade:serve', function () {
-  var assets = $.useref.assets()
+var serveTasks = [
+  'extras',
+  'assets',
+  'fonts',
+  'imagemin',
+  'jade',
+  'scripts',
+  'ngConfig',
+  'styles',
+];
 
-  return gulp.src('./app/**/*.jade')
-    .pipe($.jade({
-      pretty: true
-    }))
-    .on('error', $.util.log)
-    .pipe(gulp.dest('./.tmp'));
-});
-
-/**
- * Compile stylus to dist
- * @return {object} stream
- */
-gulp.task('styles:dist', function () {
-  var filterStyl = $.filter('**/*.styl');
-
-  return gulp.src(srcStyles)
-    .pipe(filterStyl)
-    .pipe($.stylus({
-      compress: true
-    }))
-    .on('error', $.util.log)
-    .pipe(filterStyl.restore())
-    .pipe($.concat("main.min.css"))
-    .pipe($.autoprefixer(autoprefixerConfig))
-    .pipe(gulp.dest('./dist/styles'));
-});
-
-/**
- * Compile stylus to tmp
- * @return {object} stream
- */
-gulp.task('styles:serve', function () {
-  var filterStyl = $.filter('**/*.styl');
-
-  return gulp.src(srcStyles)
-    .pipe(filterStyl)
-    .pipe($.stylus())
-    .on('error', $.util.log)
-    .pipe(filterStyl.restore())
-    .pipe($.autoprefixer(autoprefixerConfig))
-    .pipe(gulp.dest('./.tmp/styles'))
-    .pipe(reload({stream: true}));
-});
-
-/**
- * Compile coffee to dist
- * @return {object} stream
- */
-gulp.task('coffee:dist', function () {
-  return gulp.src('./app/scripts/**/*.coffee')
-    .pipe($.coffee({
-      bare: true
-    }))
-    .pipe($.ngAnnotate())
-    .pipe($.concat("main.min.js"))
-    .pipe($.uglify().on('error', $.util.log))
-    .pipe($.sourcemaps.init())
-    .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('./dist/scripts'));
-});
-
-/**
- * Compile coffee to tmp
- * @return {object} stream
- */
-gulp.task('coffee:serve', function () {
-  return gulp.src('./app/scripts/**/*.coffee')
-    .pipe($.coffee({
-      bare: true
-    }))
-    .pipe(gulp.dest('./.tmp/scripts'));
-});
-
-/**
- * Imagemin
- * @return {stream}
- */
-gulp.task('imagemin:dist', function () {
-  return gulp.src('app/assets/images/**/*.{jpg,.png,.jpeg,.svg}')
-    .pipe($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest('./dist/assets/images'));
-});
-
-/**
- * Imagemin
- * @return {stream}
- */
-gulp.task('imagemin:serve', function () {
-  return gulp.src('app/assets/images/**/*.{jpg,.png,.jpeg,.svg}')
-    .pipe($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest('./.tmp/assets/images'));
-});
-
-gulp.task('build', ['clean'], function () {
-
-  gulp.start([
-    'assets:dist',
-    'extras:dist',
-    'imagemin:dist',
-    'jade:dist',
-    'styles:dist',
-    'coffee:dist'
-  ]);
-
-});
-
-gulp.task('serve', ['clean'], function () {
-  gulp.start([
-    'assets:serve',
-    'extras:serve',
-    'imagemin:serve',
-    'jade:serve',
-    'styles:serve',
-    'coffee:serve'
-  ]);
-
+gulp.task('serve', gulpsync.sync(['clean', 'set:env', serveTasks]), function () {
   browserSync({
     notify: false,
-    port: 9000,
+    port: port,
     server: {
       baseDir: ['.tmp'],
       routes: {
-        '/bower_components': './app/bower_components'
+        '/bower_components': 'bower_components'
       }
     }
   });
 
-  gulp.watch('app/**/*.jade', ['jade:serve', reload]);
-  gulp.watch('app/scripts/**/*.coffee', ['coffee:serve', reload]);
-  gulp.watch('app/styles/**/*.styl', ['styles:serve']);
-  gulp.watch('app/assets/**/*.*', ['assets:serve', 'imagemin:serve']);
-  gulp.watch(['app/*.*', '!app/*.jade'], ['extras:serve']);
+  gulp.watch('app/**/*.jade', ['jade', reload]);
+  gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
+  gulp.watch('app/styles/**/*.styl', ['styles']);
+  gulp.watch('app/assets/images', ['imagemin', reload]);
+  gulp.watch('app/config.json', ['ngConfig', reload]);
+  gulp.watch('bower.json', ['wiredep', reload]);
+
+  gulp.watch([
+    'app/assets/**/*',
+    '!app/assets/images',
+  ], ['assets', reload]);
+
+  gulp.watch([
+    'app/*.*',
+    '!app/*.jade',
+    '!app/config.json',
+  ], ['extras', reload]);
 
 });
 
-gulp.task('default', ['serve']);
+gulp.task('build', ['clean', 'set:env'], function () {
+  destDir = 'dist';
+
+  gulp.start([
+    'extras',
+    'assets',
+    'fonts',
+    'imagemin',
+    'ngConfig',
+    'compile:dist'
+  ], function () {
+    del('.tmp');
+  });
+
+});
+
+gulp.task('serve:dist', function () {
+  browserSync({
+    notify: false,
+    port: port,
+    server: {
+      baseDir: ['dist'],
+    }
+  });
+});
+
+gulp.task('default', ['build']);

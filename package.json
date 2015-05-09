@@ -1,7 +1,7 @@
 {
   "name": "generator-genlys",
-  "version": "0.0.1",
-  "description": "Yeoman generator",
+  "version": "0.0.3",
+  "description": "Yeoman generator genlys",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "nevech/generator-genlys",
@@ -17,15 +17,23 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "web",
+    "front-end",
+    "jade",
+    "stylus",
+    "coffee",
+    "gulp"
   ],
   "dependencies": {
     "yeoman-generator": "^0.19.0",
     "chalk": "^1.0.0",
-    "yosay": "^1.0.2"
+    "yosay": "^1.0.2",
+    "mkdirp": "^0.5.0",
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.0.3"
   },
   "devDependencies": {
-    "mkdirp": "^0.5.0",
     "mocha": "*"
   }
 }
