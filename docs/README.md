@@ -19,9 +19,10 @@ After generating your project will have the following structure:
 
 ```
 app
-├─── assets
+├─── public
 │  ├─── fonts
-│  └─── images
+│  ├─── images
+│  └─── robots.txt
 ├─── scripts
 │  ├── configs
 │  │  ├─── http.coffee
@@ -40,9 +41,9 @@ app
 ├─── views
 │  ├─── home.jade
 ├─── config.json
-├─── robots.txt
 └─── index.jade
 ```
+
 
 ## General tasks
 To start developing run:
@@ -65,6 +66,9 @@ If you want to check your build run:
 ```sh
 gulp serve:dist
 ```
+
+**Public dir**
+All files in `app/public` directory are copied to the root of the build (`dist`).
 
 ## Configs
 After run `gulp serve` or `gulp build` file `app/configs/config.js` will be created. This file contains constants for your `angular.module`.
