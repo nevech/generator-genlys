@@ -90,8 +90,8 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     app: function () {
-      mkdirp('app/assets/fonts');
-      mkdirp('app/assets/images');
+      mkdirp('app/public/fonts');
+      mkdirp('app/public/images');
       mkdirp('app/scripts');
       mkdirp('app/scripts/configs');
       mkdirp('app/scripts/controllers');
@@ -102,13 +102,13 @@ module.exports = yeoman.generators.Base.extend({
       mkdirp('app/styles');
       mkdirp('app/views');
 
-      this.directory('assets', 'app/assets');
+      this.directory('public', 'app/public');
       this.directory('scripts', 'app/scripts');
       this.directory('styles', 'app/styles');
       this.directory('views', 'app/views');
       this.copy('index.jade', 'app/index.jade');
 
-      this.copy('robots.txt', 'app/robots.txt');
+      this.copy('robots.txt', 'app/public/robots.txt');
       this.copy('config.json', 'app/config.json');
     }
 
