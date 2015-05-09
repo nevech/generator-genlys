@@ -19,6 +19,13 @@ var $ = require('gulp-load-plugins')({
   scope: ['dependencies', 'devDependencies']
 });
 
+function swallowError (err) {
+  //If you want details of the error in the console
+  console.log(err.toString());
+
+  this.emit('end');
+}
+
 gulp.task('clean', function (cb) {
   del(['dist', '.tmp'], cb);
 });
@@ -98,6 +105,7 @@ gulp.task('scripts', function () {
     .pipe($.coffee({
       bare: true
     }))
+    .on('error', swallowError)
     .pipe(filterCoffee.restore())
     .pipe($.ngAnnotate())
     .pipe(gulp.dest('.tmp/scripts'));
@@ -112,9 +120,10 @@ gulp.task('styles', function () {
     ])
     .pipe(filterStyl)
     .pipe($.stylus())
+    .on('error', swallowError)
     .pipe(filterStyl.restore())
     .pipe($.autoprefixer({
-      browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
+      browsers: ['last 3 versions']
     }))
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
@@ -134,7 +143,7 @@ gulp.task('jade', ['wiredep'], function () {
     .pipe($.jade({
       pretty: true
     }))
-    .on('error', $.util.log)
+    .on('error', swallowError)
     .pipe(gulp.dest('.tmp'));
 });
 
