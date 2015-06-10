@@ -8,7 +8,7 @@ var reload = browserSync.reload;
 
 var env = process.env.NODE_ENV || 'development';
 var port = process.env.PORT || 9000;
-var appName = 'myApp';
+var appName = 'genlys';
 var destDir = '.tmp';
 
 var $ = require('gulp-load-plugins')({
@@ -16,12 +16,11 @@ var $ = require('gulp-load-plugins')({
   scope: ['dependencies', 'devDependencies']
 });
 
-function swallowError (err) {
-  //If you want details of the error in the console
-  console.log(err.toString());
-
-  this.emit('end');
-}
+var _gulpsrc = gulp.src;
+gulp.src = function() {
+  return _gulpsrc.apply(gulp, arguments)
+    .pipe($.plumber());
+};
 
 gulp.task('clean', function (cb) {
   del(['dist', '.tmp'], cb);
@@ -92,7 +91,6 @@ gulp.task('scripts', function () {
     .pipe($.coffee({
       bare: true
     }))
-    .on('error', swallowError)
     .pipe(filterCoffee.restore())
     .pipe($.ngAnnotate())
     .pipe(gulp.dest('.tmp/scripts'));
@@ -107,7 +105,6 @@ gulp.task('styles', function () {
     ])
     .pipe(filterStyl)
     .pipe($.stylus())
-    .on('error', swallowError)
     .pipe(filterStyl.restore())
     .pipe($.autoprefixer({
       browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
@@ -130,7 +127,6 @@ gulp.task('jade', ['wiredep'], function () {
     .pipe($.jade({
       pretty: true
     }))
-    .on('error', swallowError)
     .pipe(gulp.dest('.tmp'));
 });
 

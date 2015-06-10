@@ -1,4 +1,4 @@
-app = angular.module('myApp', [
+app = angular.module('genlys', [
   'ngCookies'
   'ngResource'
   'ngRoute'
