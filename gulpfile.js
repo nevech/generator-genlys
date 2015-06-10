@@ -2,6 +2,7 @@ var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
 var del = require('del');
+var inquirer = require('inquirer');
 var gulpsync = require('gulp-sync')(gulp);
 
 var reload = browserSync.reload;
@@ -208,4 +209,17 @@ gulp.task('serve:dist', function () {
   });
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', function () {
+  gulp.src('package.json')
+    .pipe($.prompt.prompt({
+      type: 'list',
+      name: 'task',
+      message: 'What do you want to do?',
+      choices: [
+        'serve',
+        'build'
+      ]
+    }, function (answer) {
+      gulp.start(answer.task);
+    }));
+});
