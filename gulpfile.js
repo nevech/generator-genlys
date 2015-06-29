@@ -53,7 +53,9 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('imagemin', function () {
-  return gulp.src('app/public/images/**/*.{jpg,.png,.jpeg,.svg}')
+  var src = 'app/public/images/**/*.{jpg,.png,.jpeg,.svg}';
+
+  return gulp.src(src)
     .pipe($.imagemin({
       optimizationLevel: 3,
       progressive: true,
