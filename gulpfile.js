@@ -93,9 +93,7 @@ function stylesTransform () {
     .pipe($.stylus)
     .pipe(filterStyl.restore)
     .pipe(function () {
-      return $.autoprefixer({
-        browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
-      });
+      return $.autoprefixer(config.autoprefixer);
     })();
 }
 
