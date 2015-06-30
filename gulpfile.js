@@ -3,11 +3,10 @@ var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
 var del = require('del');
 var gulpsync = require('gulp-sync')(gulp);
+var lazypipe = require('lazypipe');
 
 var reload = browserSync.reload;
 var config = require('./configs/gulpconfig.js');
-
-console.log(config);
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
@@ -64,6 +63,15 @@ gulp.task('imagemin', function () {
     .pipe(gulp.dest(config.destDir + '/images'));
 });
 
+gulp.task('wiredep', function () {
+  return gulp.src('app/index.jade')
+    .pipe(wiredep({
+      directory: './bower_components',
+      ignorePath: /^(\.\.\/)*\.\./
+    }))
+    .pipe(gulp.dest('app'));
+});
+
 gulp.task('scripts', function () {
   var filterCoffee = $.filter('**/*.coffee');
 
@@ -80,29 +88,34 @@ gulp.task('scripts', function () {
     .pipe(gulp.dest(config.destDir + '/scripts'));
 });
 
-gulp.task('styles', function () {
+function stylesTransform () {
   var filterStyl = $.filter('**/*.styl');
 
-  return gulp.src([
-      'app/styles/**/*.styl',
-      'app/styles/**/*.css'
-    ])
-    .pipe(filterStyl)
-    .pipe($.stylus())
-    .pipe(filterStyl.restore())
-    .pipe($.autoprefixer({
-      browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
-    }))
+  return lazypipe()
+    .pipe(function () {
+      return filterStyl;
+    })
+    .pipe($.stylus)
+    .pipe(filterStyl.restore)
+    .pipe(function () {
+      return $.autoprefixer({
+        browsers: ['> 0.5%', 'ie 8', 'Opera 11.5']
+      });
+    })();
+}
+
+gulp.task('styles', function () {
+  return gulp.src(config.srcStyles)
+    .pipe(stylesTransform())
     .pipe(gulp.dest(config.destDir + '/styles'));
 });
 
-gulp.task('wiredep', function () {
-  return gulp.src('app/index.jade')
-    .pipe(wiredep({
-      directory: './bower_components',
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
+gulp.task('styles:watch', function () {
+  return gulp.src(config.srcStyles)
+    .pipe($.watch(config.srcStyles))
+    .pipe(stylesTransform())
+    .pipe(gulp.dest(config.destDir + '/styles'))
+    .pipe(reload({stream: true}));
 });
 
 gulp.task('jade', ['wiredep'], function () {
@@ -136,8 +149,7 @@ var serveTasks = [
   'imagemin',
   'jade',
   'scripts',
-  'ngConfig',
-  'styles',
+  'ngConfig'
 ];
 
 gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
@@ -152,9 +164,10 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     }
   });
 
+  gulp.start('styles:watch');
+
   gulp.watch('app/**/*.jade', ['jade', reload]);
   gulp.watch('app/scripts/**/*.coffee', ['scripts', reload]);
-  gulp.watch('app/styles/**/*.styl', ['styles', reload]);
   gulp.watch('app/public/images', ['imagemin', reload]);
   gulp.watch('bower.json', ['wiredep', 'fonts', reload]);
 
