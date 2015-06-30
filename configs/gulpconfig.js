@@ -2,7 +2,7 @@ var args = require('yargs').argv;
 
 module.exports = {
   // Angular app name
-  'ngAppName': 'genlys',
+  'ngApp': 'genlys',
 
   // Destination directory
   'destDir': '.tmp',
@@ -24,5 +24,21 @@ module.exports = {
     'app/styles/**/*.styl',
     'app/styles/**/*.css'
   ],
+
+  'paths': {
+    'js': 'app/scripts/**/*.{js,coffee}',
+    'jade': 'app/**/*.jade',
+    'styles': 'app/styles/**/*.{styl,css}',
+    'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
+  },
+
+  // Configs for environments
+  'development': {
+    'compileCss': false
+  },
+
+  'production': {
+    'isMinifyCss': true
+  }
 
 };
