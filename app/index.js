@@ -108,8 +108,6 @@ module.exports = yeoman.generators.Base.extend({
       this.directory('views', 'app/views');
 
       this.copy('index.jade', 'app/index.jade');
-      this.copy('config.json', 'app/config.json');
-      this.copy('robots.txt', 'app/public/robots.txt');
     }
 
   },
