@@ -50,7 +50,7 @@ function stylesTransform () {
 }
 
 gulp.task('clean', function (cb) {
-  del([config.distDir, config.destDir], cb);
+  del([config.buildDir, config.destDir], cb);
 });
 
 gulp.task('ngConfig', function () {
@@ -160,7 +160,7 @@ gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
       empty: true,
       spare: true
     }))
-    .pipe(gulp.dest(config.distDir));
+    .pipe(gulp.dest(config.buildDir));
 });
 
 var serveTasks = [
