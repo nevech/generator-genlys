@@ -14,11 +14,5 @@ app.config ($httpProvider, $locationProvider) ->
         #   config.params.token = token
 
         return config
-
-      response: (response) ->
-        return response
-
-      responseError: (response) ->
-        $q.reject response
     }
   ]
