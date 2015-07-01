@@ -19,7 +19,7 @@ module.exports = {
   // 3) Or set default development
   'env': args.env || process.env.NODE_ENV || 'development',
 
-  // autoprefixer See: https://github.com/postcss/autoprefixer-core#usage
+  // Option for autoprefixer. See: https://github.com/postcss/autoprefixer-core#usage
   'autoprefixer': {
     'browsers': ['> 2%']
   },

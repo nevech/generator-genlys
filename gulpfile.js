@@ -19,6 +19,36 @@ gulp.src = function() {
     .pipe($.plumber());
 };
 
+function scriptsTransform () {
+  var filterCoffee = $.filter('**/*.coffee');
+
+  return lazypipe()
+    .pipe(function setFilterCoffee() {
+      return filterCoffee;
+    })
+    .pipe(function compileCoffee() {
+      return $.coffee({
+        bare: true
+      });
+    })
+    .pipe(filterCoffee.restore)
+    .pipe($.ngAnnotate)();
+}
+
+function stylesTransform () {
+  var filterStyl = $.filter('**/*.styl');
+
+  return lazypipe()
+    .pipe(function setFilterStylus() {
+      return filterStyl;
+    })
+    .pipe($.stylus)
+    .pipe(filterStyl.restore)
+    .pipe(function autoPrefixer() {
+      return $.autoprefixer(config.autoprefixer);
+    })();
+}
+
 gulp.task('clean', function (cb) {
   del([config.distDir, config.destDir], cb);
 });
@@ -71,31 +101,18 @@ gulp.task('wiredep', function () {
 });
 
 gulp.task('scripts', function () {
-  var filterCoffee = $.filter('**/*.coffee');
-
   return gulp.src(config.paths.js)
-    .pipe(filterCoffee)
-    .pipe($.coffee({
-      bare: true
-    }))
-    .pipe(filterCoffee.restore())
-    .pipe($.ngAnnotate())
+    .pipe(scriptsTransform())
     .pipe(gulp.dest(config.destDir + '/scripts'));
 });
 
-function stylesTransform () {
-  var filterStyl = $.filter('**/*.styl');
-
-  return lazypipe()
-    .pipe(function () {
-      return filterStyl;
-    })
-    .pipe($.stylus)
-    .pipe(filterStyl.restore)
-    .pipe(function () {
-      return $.autoprefixer(config.autoprefixer);
-    })();
-}
+gulp.task('scripts:watch', function () {
+  return gulp.src(config.paths.js)
+    .pipe($.watch(config.paths.js, {verbose: true}))
+    .pipe(scriptsTransform())
+    .pipe(gulp.dest(config.destDir + '/scripts'))
+    .pipe(reload({stream: true}));
+});
 
 gulp.task('styles', function () {
   return gulp.src(config.paths.styles)
@@ -105,18 +122,28 @@ gulp.task('styles', function () {
 
 gulp.task('styles:watch', function () {
   return gulp.src(config.paths.styles)
-    .pipe($.watch(config.paths.styles))
+    .pipe($.watch(config.paths.styles, {verbose: true}))
     .pipe(stylesTransform())
     .pipe(gulp.dest(config.destDir + '/styles'))
     .pipe(reload({stream: true}));
 });
 
 gulp.task('jade', ['wiredep'], function () {
-  return gulp.src('config.paths.jade')
+  return gulp.src(config.paths.jade)
     .pipe($.jade({
       pretty: true
     }))
     .pipe(gulp.dest(config.destDir));
+});
+
+gulp.task('jade:watch', function () {
+  return gulp.src(config.paths.jade)
+    .pipe($.watch(config.paths.jade, {verbose: true}))
+    .pipe($.jade({
+      pretty: true
+    }))
+    .pipe(gulp.dest(config.destDir))
+    .pipe(reload({stream: true}));
 });
 
 gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
@@ -141,6 +168,7 @@ var serveTasks = [
   'fonts',
   'imagemin',
   'jade',
+  'styles',
   'scripts',
   'ngConfig'
 ];
@@ -157,10 +185,8 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     }
   });
 
-  gulp.start('styles:watch');
+  gulp.start(['styles:watch', 'jade:watch', 'scripts:watch']);
 
-  gulp.watch(config.paths.jade, ['jade', reload]);
-  gulp.watch(config.paths.js, ['scripts', reload]);
   gulp.watch(config.paths.images, ['imagemin', reload]);
   gulp.watch('bower.json', ['wiredep', 'fonts', reload]);
 
