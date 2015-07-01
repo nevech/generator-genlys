@@ -56,6 +56,23 @@ function copyAssets (dest) {
   ]).pipe(gulp.dest(dest));
 }
 
+function imagemin (dest) {
+  return gulp.src(config.paths.images)
+    .pipe($.imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest(dest));
+}
+
+function bowerFonts(dest) {
+  return gulp.src(require('main-bower-files')({
+    filter: '**/*.{eot,svg,ttf,woff,woff2}'
+  }).concat('app/public/fonts/**/*'))
+    .pipe(gulp.dest(dest));
+}
+
 gulp.task('clean', function (cb) {
   del([config.buildDir, config.destDir], cb);
 });
@@ -82,21 +99,20 @@ gulp.task('assets:dist', function () {
   return copyAssets(config.buildDir);
 });
 
-gulp.task('fonts', function () {
-  return gulp.src(require('main-bower-files')({
-    filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/public/fonts/**/*'))
-    .pipe(gulp.dest(config.destDir + '/fonts'));
+gulp.task('bowerFonts', function () {
+  return bowerFonts(config.destDir + '/fonts');
+});
+
+gulp.task('bowerFonts:dist', function () {
+  return bowerFonts(config.buildDir + '/fonts');
 });
 
 gulp.task('imagemin', function () {
-  return gulp.src(config.paths.images)
-    .pipe($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest(config.destDir + '/images'));
+  return imagemin(config.destDir + '/images');
+});
+
+gulp.task('imagemin:dist', function () {
+  return imagemin(config.buildDir + '/images');
 });
 
 gulp.task('wiredep', function () {
@@ -156,7 +172,7 @@ gulp.task('jade:watch', function () {
 
 var serveTasks = [
   'assets',
-  'fonts',
+  'bowerFonts',
   'imagemin',
   'jade',
   'styles',
@@ -179,7 +195,7 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
   gulp.start(['styles:watch', 'jade:watch', 'scripts:watch']);
 
   gulp.watch(config.paths.images, ['imagemin', reload]);
-  gulp.watch('bower.json', ['wiredep', 'fonts', reload]);
+  gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
 
   gulp.watch([
     'app/public/**/*',
@@ -194,22 +210,22 @@ gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function
   return gulp.src(config.destDir + '/**/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify(), $.rev() ))
-    .pipe($.if('*.css', $.minifyCss(), $.rev()))
+    .pipe($.if('*.css', $.minifyCss(), $.rev() ))
     .pipe(assets.restore())
     .pipe($.useref())
     .pipe($.revReplace())
-    .pipe($.minifyHtml({
+    .pipe($.if('*.html', $.minifyHtml({
       empty: true,
       spare: true
-    }))
+    })))
     .pipe(gulp.dest(config.buildDir));
 });
 
 gulp.task('build', ['clean'], function () {
 
   gulp.start([
-    'fonts',
-    'imagemin',
+    'bowerFonts:dist',
+    'imagemin:dist',
     'ngConfig',
     'compile:dist'
   ], function () {
