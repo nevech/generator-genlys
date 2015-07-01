@@ -49,6 +49,13 @@ function stylesTransform () {
     })();
 }
 
+function copyAssets (dest) {
+  return gulp.src([
+    'app/public/**/*',
+    '!app/public/images',
+  ]).pipe(gulp.dest(dest));
+}
+
 gulp.task('clean', function (cb) {
   del([config.buildDir, config.destDir], cb);
 });
@@ -68,10 +75,11 @@ gulp.task('ngConfig', function () {
 });
 
 gulp.task('assets', function () {
-  return gulp.src([
-    'app/public/**/*',
-    '!app/public/images',
-  ]).pipe(gulp.dest(config.destDir));
+  return copyAssets(config.destDir);
+});
+
+gulp.task('assets:dist', function () {
+  return copyAssets(config.buildDir);
 });
 
 gulp.task('fonts', function () {
@@ -146,23 +154,6 @@ gulp.task('jade:watch', function () {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('compile:dist', ['jade', 'scripts', 'styles'], function () {
-  var assets = $.useref.assets({searchPath: ['.', config.destDir]});
-
-  return gulp.src(config.destDir + '/**/*.html')
-    .pipe(assets)
-    .pipe($.if('*.js', $.uglify(), $.rev() ))
-    .pipe($.if('*.css', $.minifyCss(), $.rev()))
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe($.revReplace())
-    .pipe($.minifyHtml({
-      empty: true,
-      spare: true
-    }))
-    .pipe(gulp.dest(config.buildDir));
-});
-
 var serveTasks = [
   'assets',
   'fonts',
@@ -197,10 +188,26 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
 
 });
 
+gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function () {
+  var assets = $.useref.assets({searchPath: ['.', config.destDir]});
+
+  return gulp.src(config.destDir + '/**/*.html')
+    .pipe(assets)
+    .pipe($.if('*.js', $.uglify(), $.rev() ))
+    .pipe($.if('*.css', $.minifyCss(), $.rev()))
+    .pipe(assets.restore())
+    .pipe($.useref())
+    .pipe($.revReplace())
+    .pipe($.minifyHtml({
+      empty: true,
+      spare: true
+    }))
+    .pipe(gulp.dest(config.buildDir));
+});
+
 gulp.task('build', ['clean'], function () {
 
   gulp.start([
-    'assets',
     'fonts',
     'imagemin',
     'ngConfig',
