@@ -10,7 +10,7 @@
 ## Install global packages
 
 ```sh
-npm install -g bower gulp-cli
+$ npm install -g bower gulp-cli
 ```
 
 ## Build instruction
@@ -22,10 +22,10 @@ npm install -g bower gulp-cli
 
 **Use configs**
 
-Сonfiguration file in the folder `app/config.json`.
+Сonfiguration files in the folder `configs`.
 
-* Run `gulp serve --production` to run development server with config production.
-* Run `gulp build --production` to build project with config production.
+* Run `gulp serve --env=production` to run development server with config production.
+* Run `gulp build --env=production` to build project with config production.
 
 Default is `development` config.
 
