@@ -18,17 +18,6 @@ gulp.src = function() {
     .pipe($.plumber());
 };
 
-function imageminTransform (dest) {
-  return lazypipe()
-    .pipe(function imagemin() {
-      return $.imagemin({
-        optimizationLevel: 3,
-        progressive: true,
-        interlaced: true
-      });
-    })();
-}
-
 function bowerFonts(dest) {
   return gulp.src(require('main-bower-files')({
     filter: '**/*.{eot,svg,ttf,woff,woff2}'
@@ -46,26 +35,6 @@ gulp.task('bowerFonts', function () {
 
 gulp.task('bowerFonts:dist', function () {
   return bowerFonts(config.buildDir + '/fonts');
-});
-
-gulp.task('images', function () {
-  return gulp.src(config.paths.images)
-    .pipe(imageminTransform())
-    .pipe(gulp.dest(config.destDir + '/images'));
-});
-
-gulp.task('images:watch', function () {
-  return gulp.src(config.paths.images)
-    .pipe($.watch(config.paths.images, {verbose: true}))
-    .pipe(imageminTransform())
-    .pipe(gulp.dest(config.destDir + '/images'))
-    .pipe(reload({stream: true}));
-});
-
-gulp.task('images:dist', function () {
-  return gulp.src(config.paths.images)
-    .pipe(imageminTransform())
-    .pipe(gulp.dest(config.buildDir + '/images'));
 });
 
 gulp.task('wiredep', function () {
