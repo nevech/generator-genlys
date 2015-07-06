@@ -49,13 +49,6 @@ function stylesTransform () {
     })();
 }
 
-function copyAssets (dest) {
-  return gulp.src([
-    'app/public/**/*',
-    '!app/public/images',
-  ]).pipe(gulp.dest(dest));
-}
-
 function imageminTransform (dest) {
   return lazypipe()
     .pipe(function imagemin() {
@@ -93,15 +86,20 @@ gulp.task('ngConfig', function () {
 });
 
 gulp.task('assets', function () {
-  return copyAssets(config.destDir);
+  return gulp.src(config.paths.assets)
+    .pipe(gulp.dest(config.destDir));
 });
 
 gulp.task('assets:watch', function () {
-  return copyAssets(config.destDir);
+  return gulp.src(config.paths.assets)
+    .pipe($.watch(config.paths.assets, {verbose: true}))
+    .pipe(gulp.dest(config.destDir))
+    .pipe(reload({stream: true}));
 });
 
 gulp.task('assets:dist', function () {
-  return copyAssets(config.buildDir);
+  return gulp.src(config.paths.assets)
+    .pipe(gulp.dest(config.buildDir));
 });
 
 gulp.task('bowerFonts', function () {
@@ -209,16 +207,15 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     }
   });
 
-  gulp.start(['styles:watch', 'jade:watch', 'scripts:watch', 'images:watch']);
+  gulp.start([
+    'styles:watch',
+    'jade:watch',
+    'scripts:watch',
+    'images:watch',
+    'assets:watch'
+  ]);
 
-  // gulp.watch(config.paths.images, ['images', reload]);
   gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
-
-  gulp.watch([
-    'app/public/**/*',
-    '!app/public/images',
-  ], ['assets', reload]);
-
 });
 
 gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function () {

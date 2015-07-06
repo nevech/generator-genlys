@@ -24,17 +24,15 @@ module.exports = {
     'browsers': ['> 2%']
   },
 
-  // paths to styles
-  'srcStyles': [
-    'app/styles/**/*.styl',
-    'app/styles/**/*.css'
-  ],
-
   'paths': {
     'js': 'app/scripts/**/*.{js,coffee}',
     'jade': 'app/**/*.jade',
     'styles': 'app/styles/**/*.{styl,css}',
     'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
+    'assets': [
+      'app/public/**/*',
+      '!app/public/images',
+    ]
   },
 
   // Configs for environments
