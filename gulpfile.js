@@ -2,38 +2,25 @@ var browserSync = require('browser-sync');
 var gulp = require('gulp');
 var del = require('del');
 var gulpsync = require('gulp-sync')(gulp);
-var lazypipe = require('lazypipe');
 
 var reload = browserSync.reload;
 var config = require('./configs/');
 
+// load gulp plugins
 var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
+// require all task from gulp-tasks dir
 require('require-dir')('./gulp-tasks');
 
+// apply gulp-plumber for all streams
 var _gulpsrc = gulp.src;
 gulp.src = function() {
   return _gulpsrc.apply(gulp, arguments)
     .pipe($.plumber());
 };
 
-function bowerFonts(dest) {
-  return gulp.src(require('main-bower-files')({
-    filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/public/fonts/**/*'))
-    .pipe(gulp.dest(dest));
-}
-
 gulp.task('clean', function (cb) {
   del([config.buildDir, config.destDir], cb);
-});
-
-gulp.task('bowerFonts', function () {
-  return bowerFonts(config.destDir + '/fonts');
-});
-
-gulp.task('bowerFonts:dist', function () {
-  return bowerFonts(config.buildDir + '/fonts');
 });
 
 var serveTasks = [

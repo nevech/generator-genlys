@@ -43,7 +43,7 @@
     "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4",
     "lazypipe": "^0.2.4",
-    "main-bower-files": "^2.7.0",
+    "main-bower-files": "^2.8.2",
     "require-dir": "^0.3.0",
     "wiredep": "^2.2.2",
     "yargs": "^3.8.0"
