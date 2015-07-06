@@ -56,14 +56,15 @@ function copyAssets (dest) {
   ]).pipe(gulp.dest(dest));
 }
 
-function imagemin (dest) {
-  return gulp.src(config.paths.images)
-    .pipe($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest(dest));
+function imageminTransform (dest) {
+  return lazypipe()
+    .pipe(function imagemin() {
+      return $.imagemin({
+        optimizationLevel: 3,
+        progressive: true,
+        interlaced: true
+      });
+    })();
 }
 
 function bowerFonts(dest) {
@@ -95,6 +96,10 @@ gulp.task('assets', function () {
   return copyAssets(config.destDir);
 });
 
+gulp.task('assets:watch', function () {
+  return copyAssets(config.destDir);
+});
+
 gulp.task('assets:dist', function () {
   return copyAssets(config.buildDir);
 });
@@ -107,12 +112,24 @@ gulp.task('bowerFonts:dist', function () {
   return bowerFonts(config.buildDir + '/fonts');
 });
 
-gulp.task('imagemin', function () {
-  return imagemin(config.destDir + '/images');
+gulp.task('images', function () {
+  return gulp.src(config.paths.images)
+    .pipe(imageminTransform())
+    .pipe(gulp.dest(config.destDir + '/images'));
 });
 
-gulp.task('imagemin:dist', function () {
-  return imagemin(config.buildDir + '/images');
+gulp.task('images:watch', function () {
+  return gulp.src(config.paths.images)
+    .pipe($.watch(config.paths.images, {verbose: true}))
+    .pipe(imageminTransform())
+    .pipe(gulp.dest(config.destDir + '/images'))
+    .pipe(reload({stream: true}));
+});
+
+gulp.task('images:dist', function () {
+  return gulp.src(config.paths.images)
+    .pipe(imageminTransform())
+    .pipe(gulp.dest(config.buildDir + '/images'));
 });
 
 gulp.task('wiredep', function () {
@@ -173,7 +190,7 @@ gulp.task('jade:watch', function () {
 var serveTasks = [
   'assets',
   'bowerFonts',
-  'imagemin',
+  'images',
   'jade',
   'styles',
   'scripts',
@@ -192,9 +209,9 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     }
   });
 
-  gulp.start(['styles:watch', 'jade:watch', 'scripts:watch']);
+  gulp.start(['styles:watch', 'jade:watch', 'scripts:watch', 'images:watch']);
 
-  gulp.watch(config.paths.images, ['imagemin', reload]);
+  // gulp.watch(config.paths.images, ['images', reload]);
   gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
 
   gulp.watch([
@@ -225,7 +242,7 @@ gulp.task('build', ['clean'], function () {
 
   gulp.start([
     'bowerFonts:dist',
-    'imagemin:dist',
+    'images:dist',
     'ngConfig',
     'compile:dist'
   ], function () {
