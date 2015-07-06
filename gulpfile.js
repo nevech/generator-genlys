@@ -13,27 +13,13 @@ var $ = require('gulp-load-plugins')({
   scope: ['dependencies', 'devDependencies']
 });
 
+require('require-dir')('./gulp-tasks');
+
 var _gulpsrc = gulp.src;
 gulp.src = function() {
   return _gulpsrc.apply(gulp, arguments)
     .pipe($.plumber());
 };
-
-function scriptsTransform () {
-  var filterCoffee = $.filter('**/*.coffee');
-
-  return lazypipe()
-    .pipe(function setFilterCoffee() {
-      return filterCoffee;
-    })
-    .pipe(function compileCoffee() {
-      return $.coffee({
-        bare: true
-      });
-    })
-    .pipe(filterCoffee.restore)
-    .pipe($.ngAnnotate)();
-}
 
 function stylesTransform () {
   var filterStyl = $.filter('**/*.styl');
@@ -69,20 +55,6 @@ function bowerFonts(dest) {
 
 gulp.task('clean', function (cb) {
   del([config.buildDir, config.destDir], cb);
-});
-
-gulp.task('ngConfig', function () {
-  var src = config.getPathToNgConfig();
-
-  return gulp.src(src)
-    .pipe($.ngConfig(config.ngApp, {
-      createModule: false,
-    }))
-    .pipe($.rename(function (path) {
-      path.basename = 'config';
-      path.extname = '.js';
-    }))
-    .pipe(gulp.dest(config.destDir + '/scripts/configs'))
 });
 
 gulp.task('assets', function () {
@@ -137,20 +109,6 @@ gulp.task('wiredep', function () {
       ignorePath: /^(\.\.\/)*\.\./
     }))
     .pipe(gulp.dest('app'));
-});
-
-gulp.task('scripts', function () {
-  return gulp.src(config.paths.js)
-    .pipe(scriptsTransform())
-    .pipe(gulp.dest(config.destDir + '/scripts'));
-});
-
-gulp.task('scripts:watch', function () {
-  return gulp.src(config.paths.js)
-    .pipe($.watch(config.paths.js, {verbose: true}))
-    .pipe(scriptsTransform())
-    .pipe(gulp.dest(config.destDir + '/scripts'))
-    .pipe(reload({stream: true}));
 });
 
 gulp.task('styles', function () {

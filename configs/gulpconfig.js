@@ -25,7 +25,9 @@ module.exports = {
   },
 
   'paths': {
-    'js': 'app/scripts/**/*.{js,coffee}',
+    'scripts': 'app/scripts/**/*.{js,coffee}',
+    'js': 'app/scripts/**/*.js',
+    'coffee': 'app/scripts/**/*.coffee',
     'jade': 'app/**/*.jade',
     'styles': 'app/styles/**/*.{styl,css}',
     'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
