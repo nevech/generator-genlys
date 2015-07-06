@@ -21,20 +21,6 @@ gulp.src = function() {
     .pipe($.plumber());
 };
 
-function stylesTransform () {
-  var filterStyl = $.filter('**/*.styl');
-
-  return lazypipe()
-    .pipe(function setFilterStylus() {
-      return filterStyl;
-    })
-    .pipe($.stylus)
-    .pipe(filterStyl.restore)
-    .pipe(function autoPrefixer() {
-      return $.autoprefixer(config.autoprefixer);
-    })();
-}
-
 function imageminTransform (dest) {
   return lazypipe()
     .pipe(function imagemin() {
@@ -109,20 +95,6 @@ gulp.task('wiredep', function () {
       ignorePath: /^(\.\.\/)*\.\./
     }))
     .pipe(gulp.dest('app'));
-});
-
-gulp.task('styles', function () {
-  return gulp.src(config.paths.styles)
-    .pipe(stylesTransform())
-    .pipe(gulp.dest(config.destDir + '/styles'));
-});
-
-gulp.task('styles:watch', function () {
-  return gulp.src(config.paths.styles)
-    .pipe($.watch(config.paths.styles, {verbose: true}))
-    .pipe(stylesTransform())
-    .pipe(gulp.dest(config.destDir + '/styles'))
-    .pipe(reload({stream: true}));
 });
 
 gulp.task('jade', ['wiredep'], function () {

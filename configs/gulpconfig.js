@@ -30,6 +30,8 @@ module.exports = {
     'coffee': 'app/scripts/**/*.coffee',
     'jade': 'app/**/*.jade',
     'styles': 'app/styles/**/*.{styl,css}',
+    'css': 'app/styles/**/*.css',
+    'stylus': 'app/styles/**/*.styl',
     'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
     'assets': [
       'app/public/**/*',
