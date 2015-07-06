@@ -1,5 +1,4 @@
 var browserSync = require('browser-sync');
-var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
 var del = require('del');
 var gulpsync = require('gulp-sync')(gulp);
@@ -37,38 +36,11 @@ gulp.task('bowerFonts:dist', function () {
   return bowerFonts(config.buildDir + '/fonts');
 });
 
-gulp.task('wiredep', function () {
-  return gulp.src('app/index.jade')
-    .pipe(wiredep({
-      directory: './bower_components',
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
-});
-
-gulp.task('jade', ['wiredep'], function () {
-  return gulp.src(config.paths.jade)
-    .pipe($.jade({
-      pretty: true
-    }))
-    .pipe(gulp.dest(config.destDir));
-});
-
-gulp.task('jade:watch', function () {
-  return gulp.src(config.paths.jade)
-    .pipe($.watch(config.paths.jade, {verbose: true}))
-    .pipe($.jade({
-      pretty: true
-    }))
-    .pipe(gulp.dest(config.destDir))
-    .pipe(reload({stream: true}));
-});
-
 var serveTasks = [
   'assets',
   'bowerFonts',
   'images',
-  'jade',
+  'templates',
   'styles',
   'scripts',
   'ngConfig'
@@ -88,7 +60,7 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
 
   gulp.start([
     'styles:watch',
-    'jade:watch',
+    'templates:watch',
     'scripts:watch',
     'images:watch',
     'assets:watch'
@@ -97,7 +69,7 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
   gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
 });
 
-gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function () {
+gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
   var assets = $.useref.assets({searchPath: ['.', config.destDir]});
 
   return gulp.src(config.destDir + '/**/*.html')

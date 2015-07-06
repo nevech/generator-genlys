@@ -26,12 +26,14 @@ module.exports = {
 
   'paths': {
     'scripts': 'app/scripts/**/*.{js,coffee}',
-    'js': 'app/scripts/**/*.js',
     'coffee': 'app/scripts/**/*.coffee',
+    'js': 'app/scripts/**/*.js',
+    'templates': 'app/**/*.{jade,html}',
     'jade': 'app/**/*.jade',
+    'html': 'app/**/*.html',
     'styles': 'app/styles/**/*.{styl,css}',
-    'css': 'app/styles/**/*.css',
     'stylus': 'app/styles/**/*.styl',
+    'css': 'app/styles/**/*.css',
     'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
     'assets': [
       'app/public/**/*',
