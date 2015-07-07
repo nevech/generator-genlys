@@ -38,6 +38,7 @@ module.exports = {
     'assets': [
       'app/public/**/*',
       '!app/public/images',
+      '!app/public/fonts',
     ]
   },
 

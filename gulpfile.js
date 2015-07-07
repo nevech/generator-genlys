@@ -19,13 +19,17 @@ gulp.src = function() {
     .pipe($.plumber());
 };
 
-gulp.task('clean', function (cb) {
-  del([config.buildDir, config.destDir], cb);
+gulp.task('clean:serve', function (cb) {
+  del(config.destDir, cb);
+});
+
+gulp.task('clean:dist', function (cb) {
+  del(config.buildDir, cb);
 });
 
 var serveTasks = [
   'assets',
-  'bowerFonts',
+  'fonts',
   'images',
   'templates',
   'styles',
@@ -33,7 +37,7 @@ var serveTasks = [
   'ngConfig'
 ];
 
-gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
+gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
   browserSync({
     notify: false,
     port: config.port,
@@ -50,10 +54,11 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     'templates:watch',
     'scripts:watch',
     'images:watch',
+    'fonts:watch',
     'assets:watch'
   ]);
 
-  gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
+  gulp.watch('bower.json', ['wiredep', 'fonts', reload]);
 });
 
 gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
@@ -73,10 +78,10 @@ gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], fun
     .pipe(gulp.dest(config.buildDir));
 });
 
-gulp.task('build', ['clean'], function () {
+gulp.task('build', ['clean:dist'], function () {
 
   gulp.start([
-    'bowerFonts:dist',
+    'fonts:dist',
     'images:dist',
     'ngConfig',
     'compile:dist'
