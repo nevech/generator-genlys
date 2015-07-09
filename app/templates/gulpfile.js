@@ -1,186 +1,43 @@
 var browserSync = require('browser-sync');
-var wiredep = require('wiredep').stream;
 var gulp = require('gulp');
 var del = require('del');
 var gulpsync = require('gulp-sync')(gulp);
-var lazypipe = require('lazypipe');
 
 var reload = browserSync.reload;
 var config = require('./configs/');
 
-var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'gulp.*'],
-  scope: ['dependencies', 'devDependencies']
-});
+// load gulp plugins
+var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
+// require all task from gulp-tasks dir
+require('require-dir')('./gulp-tasks');
+
+// apply gulp-plumber for all streams
 var _gulpsrc = gulp.src;
 gulp.src = function() {
   return _gulpsrc.apply(gulp, arguments)
     .pipe($.plumber());
 };
 
-function scriptsTransform () {
-  var filterCoffee = $.filter('**/*.coffee');
-
-  return lazypipe()
-    .pipe(function setFilterCoffee() {
-      return filterCoffee;
-    })
-    .pipe(function compileCoffee() {
-      return $.coffee({
-        bare: true
-      });
-    })
-    .pipe(filterCoffee.restore)
-    .pipe($.ngAnnotate)();
-}
-
-function stylesTransform () {
-  var filterStyl = $.filter('**/*.styl');
-
-  return lazypipe()
-    .pipe(function setFilterStylus() {
-      return filterStyl;
-    })
-    .pipe($.stylus)
-    .pipe(filterStyl.restore)
-    .pipe(function autoPrefixer() {
-      return $.autoprefixer(config.autoprefixer);
-    })();
-}
-
-function copyAssets (dest) {
-  return gulp.src([
-    'app/public/**/*',
-    '!app/public/images',
-  ]).pipe(gulp.dest(dest));
-}
-
-function imagemin (dest) {
-  return gulp.src(config.paths.images)
-    .pipe($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest(dest));
-}
-
-function bowerFonts(dest) {
-  return gulp.src(require('main-bower-files')({
-    filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/public/fonts/**/*'))
-    .pipe(gulp.dest(dest));
-}
-
-gulp.task('clean', function (cb) {
-  del([config.buildDir, config.destDir], cb);
+gulp.task('clean:serve', function (cb) {
+  del(config.destDir, cb);
 });
 
-gulp.task('ngConfig', function () {
-  var src = config.getPathToNgConfig();
-
-  return gulp.src(src)
-    .pipe($.ngConfig(config.ngApp, {
-      createModule: false,
-    }))
-    .pipe($.rename(function (path) {
-      path.basename = 'config';
-      path.extname = '.js';
-    }))
-    .pipe(gulp.dest(config.destDir + '/scripts/configs'))
-});
-
-gulp.task('assets', function () {
-  return copyAssets(config.destDir);
-});
-
-gulp.task('assets:dist', function () {
-  return copyAssets(config.buildDir);
-});
-
-gulp.task('bowerFonts', function () {
-  return bowerFonts(config.destDir + '/fonts');
-});
-
-gulp.task('bowerFonts:dist', function () {
-  return bowerFonts(config.buildDir + '/fonts');
-});
-
-gulp.task('imagemin', function () {
-  return imagemin(config.destDir + '/images');
-});
-
-gulp.task('imagemin:dist', function () {
-  return imagemin(config.buildDir + '/images');
-});
-
-gulp.task('wiredep', function () {
-  return gulp.src('app/index.jade')
-    .pipe(wiredep({
-      directory: './bower_components',
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
-});
-
-gulp.task('scripts', function () {
-  return gulp.src(config.paths.js)
-    .pipe(scriptsTransform())
-    .pipe(gulp.dest(config.destDir + '/scripts'));
-});
-
-gulp.task('scripts:watch', function () {
-  return gulp.src(config.paths.js)
-    .pipe($.watch(config.paths.js, {verbose: true}))
-    .pipe(scriptsTransform())
-    .pipe(gulp.dest(config.destDir + '/scripts'))
-    .pipe(reload({stream: true}));
-});
-
-gulp.task('styles', function () {
-  return gulp.src(config.paths.styles)
-    .pipe(stylesTransform())
-    .pipe(gulp.dest(config.destDir + '/styles'));
-});
-
-gulp.task('styles:watch', function () {
-  return gulp.src(config.paths.styles)
-    .pipe($.watch(config.paths.styles, {verbose: true}))
-    .pipe(stylesTransform())
-    .pipe(gulp.dest(config.destDir + '/styles'))
-    .pipe(reload({stream: true}));
-});
-
-gulp.task('jade', ['wiredep'], function () {
-  return gulp.src(config.paths.jade)
-    .pipe($.jade({
-      pretty: true
-    }))
-    .pipe(gulp.dest(config.destDir));
-});
-
-gulp.task('jade:watch', function () {
-  return gulp.src(config.paths.jade)
-    .pipe($.watch(config.paths.jade, {verbose: true}))
-    .pipe($.jade({
-      pretty: true
-    }))
-    .pipe(gulp.dest(config.destDir))
-    .pipe(reload({stream: true}));
+gulp.task('clean:dist', function (cb) {
+  del(config.buildDir, cb);
 });
 
 var serveTasks = [
   'assets',
-  'bowerFonts',
-  'imagemin',
-  'jade',
+  'fonts',
+  'images',
+  'templates',
   'styles',
   'scripts',
   'ngConfig'
 ];
 
-gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
+gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
   browserSync({
     notify: false,
     port: config.port,
@@ -192,19 +49,19 @@ gulp.task('serve', gulpsync.sync(['clean', serveTasks]), function () {
     }
   });
 
-  gulp.start(['styles:watch', 'jade:watch', 'scripts:watch']);
+  gulp.start([
+    'styles:watch',
+    'templates:watch',
+    'scripts:watch',
+    'images:watch',
+    'fonts:watch',
+    'assets:watch'
+  ]);
 
-  gulp.watch(config.paths.images, ['imagemin', reload]);
-  gulp.watch('bower.json', ['wiredep', 'bowerFonts', reload]);
-
-  gulp.watch([
-    'app/public/**/*',
-    '!app/public/images',
-  ], ['assets', reload]);
-
+  gulp.watch('bower.json', ['wiredep', 'fonts', reload]);
 });
 
-gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function () {
+gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
   var assets = $.useref.assets({searchPath: ['.', config.destDir]});
 
   return gulp.src(config.destDir + '/**/*.html')
@@ -221,11 +78,11 @@ gulp.task('compile:dist', ['jade', 'scripts', 'styles', 'assets:dist'], function
     .pipe(gulp.dest(config.buildDir));
 });
 
-gulp.task('build', ['clean'], function () {
+gulp.task('build', ['clean:dist'], function () {
 
   gulp.start([
-    'bowerFonts:dist',
-    'imagemin:dist',
+    'fonts:dist',
+    'images:dist',
     'ngConfig',
     'compile:dist'
   ], function () {

@@ -2,7 +2,7 @@ var args = require('yargs').argv;
 
 module.exports = {
   // Angular app name
-  'ngApp': 'genlys',
+  'ngApp': '<%= options.appName %>',
 
   // Destination directory
   'destDir': '.tmp',
