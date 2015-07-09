@@ -23,4 +23,9 @@ config.getPathToNgConfig = function () {
   return 'configs/ng_config/' + config.env + '.json';
 };
 
+config.optionLoadPlugins = {
+  pattern: ['gulp-*', 'gulp.*'],
+  scope: ['dependencies', 'devDependencies']
+};
+
 module.exports = config;
