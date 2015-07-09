@@ -5,7 +5,7 @@
 * node >= 0.10.0
 * npm >= 2.8.3
 * bower >= 1.4.1
-* gulp >= 3.8.11
+* gulp >= 3.9.0
 
 ## Install global packages
 
