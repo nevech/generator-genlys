@@ -107,6 +107,7 @@ module.exports = yeoman.generators.Base.extend({
       this.directory('styles', 'app/styles');
       this.directory('views', 'app/views');
       this.directory('configs', 'configs');
+      this.directory('gulp-tasks', 'gulp-tasks');
 
       this.copy('index.jade', 'app/index.jade');
     }
