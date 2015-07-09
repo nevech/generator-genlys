@@ -2,6 +2,7 @@ var browserSync = require('browser-sync');
 var gulp = require('gulp');
 var del = require('del');
 var gulpsync = require('gulp-sync')(gulp);
+var modRewrite = require('connect-modrewrite');
 
 var reload = browserSync.reload;
 var config = require('./configs/');
@@ -45,7 +46,10 @@ gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
       baseDir: ['.tmp'],
       routes: {
         '/bower_components': 'bower_components'
-      }
+      },
+      middleware: [
+        modRewrite(['!\\.\\w+$ /index.html [L]'])
+      ]
     }
   });
 
@@ -97,7 +101,10 @@ gulp.task('serve:dist', function () {
     port: config.port,
     server: {
       baseDir: ['dist'],
-    }
+    },
+    middleware: [
+      modRewrite(['!\\.\\w+$ /index.html [L]'])
+    ]
   });
 });
 
