@@ -1,8 +1,8 @@
 var gulp = require('gulp');
 var lazypipe = require('lazypipe');
-var reload = require('browser-sync').reload;
+var reload = require('../browser-sync').reload;
 
-var config = require('../configs/');
+var config = require('../config');
 var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
 var imageminTask = lazypipe()

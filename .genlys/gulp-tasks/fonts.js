@@ -1,9 +1,9 @@
 var gulp = require('gulp');
 var watch = require('gulp-watch');
 
-var config = require('../configs/');
+var config = require('../config');
 var mainBowerFiles = require('main-bower-files');
-var reload = require('browser-sync').reload;
+var reload = require('../browser-sync').reload;
 
 function getGlobFonts () {
   var glob = mainBowerFiles({

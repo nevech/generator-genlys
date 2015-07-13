@@ -1,6 +1,6 @@
-var config = require('../configs/');
+var config = require('../config');
 var lazypipe = require('lazypipe');
-var reload = require('browser-sync').reload;
+var reload = require('../browser-sync').reload;
 
 var gulp = require('gulp'),
     gulpif = require('gulp-if'),

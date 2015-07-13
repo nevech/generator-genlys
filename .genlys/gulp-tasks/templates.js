@@ -1,10 +1,11 @@
 var gulp = require('gulp');
+var gulpsync = require('gulp-sync')(gulp);
 var lazypipe = require('lazypipe');
 
-var reload = require('browser-sync').reload;
+var browserSync = require('../browser-sync');
 var wiredep = require('wiredep').stream;
 
-var config = require('../configs/');
+var config = require('../config');
 var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
 var jadeOptions = {
@@ -26,19 +27,22 @@ gulp.task('templates', ['wiredep'], function () {
     .pipe(gulp.dest(config.destDir));
 });
 
-gulp.task('html:watch', function () {
+gulp.task('html', function () {
   return gulp.src(config.paths.html)
-    .pipe($.watch(config.paths.html, {verbose: true}))
-    .pipe(gulp.dest(config.destDir))
-    .pipe(reload({stream: true}));
+    .pipe(gulp.dest(config.destDir));
 });
 
-gulp.task('jade:watch', function () {
+gulp.task('jade', function () {
   return gulp.src(config.paths.jade)
-    .pipe($.watch(config.paths.jade, {verbose: true}))
     .pipe($.jade(jadeOptions))
-    .pipe(gulp.dest(config.destDir))
-    .pipe(reload({stream: true}));
+    .pipe(gulp.dest(config.destDir));
 });
 
-gulp.task('templates:watch', ['html:watch', 'jade:watch']);
+gulp.task('templates:watch', function  () {
+  gulp.watch(config.paths.html, ['html']);
+  gulp.watch(config.paths.jade, ['jade']);
+
+  gulp.watch(".tmp/*.html").on('change', function (argument) {
+    browserSync.reload();
+  });
+});
