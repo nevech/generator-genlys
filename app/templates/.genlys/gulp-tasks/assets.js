@@ -1,7 +1,7 @@
 var gulp = require('gulp');
-var reload = require('browser-sync').reload;
+var reload = require('../browser-sync').reload;
 
-var config = require('../configs/');
+var config = require('../config');
 var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
 gulp.task('assets', function () {

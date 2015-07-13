@@ -1,4 +1,4 @@
-var config = require('./gulpconfig.js');
+var config = require('../configs/gulpconfig.js');
 var configENV = config[config.env];
 
 function getConfigENV (name, defaultValue) {

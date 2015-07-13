@@ -89,6 +89,14 @@ module.exports = yeoman.generators.Base.extend({
       );
     },
 
+    genlys: function () {
+      this.directory('.genlys', '.genlys');
+    },
+
+    configs: function () {
+      this.directory('configs', 'configs');
+    },
+
     app: function () {
       mkdirp('app/public/fonts');
       mkdirp('app/public/images');
@@ -106,8 +114,6 @@ module.exports = yeoman.generators.Base.extend({
       this.directory('scripts', 'app/scripts');
       this.directory('styles', 'app/styles');
       this.directory('views', 'app/views');
-      this.directory('configs', 'configs');
-      this.directory('gulp-tasks', 'gulp-tasks');
 
       this.copy('index.jade', 'app/index.jade');
     }
