@@ -34,7 +34,7 @@ module.exports = {
     'styles': 'app/styles/**/*.{styl,css}',
     'stylus': 'app/styles/**/*.styl',
     'css': 'app/styles/**/*.css',
-    'images': 'app/public/images/**/*.{jpg,png,jpeg,svg}',
+    'images': 'app/public/images/**/*.{jpg,png,jpeg}',
     'assets': [
       'app/public/**/*',
       '!app/public/images',
