@@ -89,7 +89,8 @@ gulp.task('build', ['clean:dist'], function () {
     'fonts:dist',
     'images:dist',
     'ngConfig',
-    'compile:dist'
+    'compile:dist',
+    'robotstxt'
   ], function () {
     del('.tmp');
   });
