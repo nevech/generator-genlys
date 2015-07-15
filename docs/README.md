@@ -20,9 +20,8 @@ After generating your project will have the following structure:
 ```
 app/
 ├─── public/
-│  ├─── fonts
-│  ├─── images
-│  └─── robots.txt
+│  ├─── fonts/
+│  └─── images/
 ├─── scripts/
 │  ├── configs/
 │  │  ├─── http.coffee
@@ -37,10 +36,11 @@ app/
 │  ├─── services/
 │  ├─── app.coffee
 ├─── styles/
-│  ├─── main.styl
+│  └─── main.styl
 ├─── views/
-│  ├─── home.jade
+│  └─── home.jade
 ├─── configs/
+│  └─── home.jade
 └─── index.jade
 ```
 
