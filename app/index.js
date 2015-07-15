@@ -74,7 +74,7 @@ module.exports = yeoman.generators.Base.extend({
       };
 
       if (this.options.includeUnderscore) {
-        bower.dependencies['underscore'] = '^1.8.2';
+        bower.dependencies['underscore'] = '^1.8.3';
       }
 
       this.copy('bowerrc', '.bowerrc');
