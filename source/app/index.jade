@@ -1,0 +1,46 @@
+doctype html
+html(ng-app="genlys")
+  head
+    base(href="/")
+    title(ng-bind="Page.getTitle()")
+
+    meta(charset="utf-8")
+    meta(name="fragment" content="!")
+    meta(name="viewport", content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0")
+
+    // build:css styles/main.css
+
+    // bower:css
+    link(rel='stylesheet', href='/bower_components/normalize.css/normalize.css')
+    // endbower
+
+    link(rel="stylesheet", href="/styles/main.css")
+    link(rel="stylesheet", href="/styles/home.css")
+    // endbuild
+
+  body(ng-controller="GlobalCtrl")
+    div#wrapper(ng-view)
+
+    // build:js scripts/main.js
+
+    // bower:js
+    script(src='/bower_components/angular/angular.js')
+    script(src='/bower_components/angular-animate/angular-animate.js')
+    script(src='/bower_components/angular-resource/angular-resource.js')
+    script(src='/bower_components/angular-cookies/angular-cookies.js')
+    script(src='/bower_components/angular-route/angular-route.js')
+    script(src='/bower_components/underscore/underscore.js')
+    // endbower
+
+    script(src='/scripts/app.js')
+
+    script(src='/scripts/configs/config.js')
+    script(src='/scripts/configs/http.js')
+    script(src='/scripts/configs/routes.js')
+    script(src='/scripts/configs/run.js')
+
+    script(src='/scripts/factories/page.js')
+
+    script(src='/scripts/controllers/global.js')
+    script(src='/scripts/controllers/home.js')
+    // endbuild

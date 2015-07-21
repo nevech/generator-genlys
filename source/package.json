@@ -1,0 +1,52 @@
+{
+  "name": "genlys",
+  "version": "1.0.0",
+  "description": "Generator front-end",
+  "author": "Ruslan Nevecherya <r.nevech@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nevech/genlys"
+  },
+  "license": "MIT",
+  "main": "gulp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.6.4",
+    "connect-modrewrite": "^0.8.1",
+    "del": "^1.1.1",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.1.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-copy": "0.0.2",
+    "gulp-filter": "^2.0.2",
+    "gulp-if": "^1.2.5",
+    "gulp-imagemin": "^2.3.0",
+    "gulp-jade": "^1.0.1",
+    "gulp-load-plugins": "^0.8.1",
+    "gulp-minify-css": "^1.1.6",
+    "gulp-minify-html": "^1.0.3",
+    "gulp-newer": "^0.5.1",
+    "gulp-ng-annotate": "^0.5.2",
+    "gulp-ng-config": "^1.2.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-prompt": "^0.1.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^3.0.1",
+    "gulp-rev-replace": "^0.4.0",
+    "gulp-stylus": "^2.0.1",
+    "gulp-sync": "^0.1.4",
+    "gulp-uglify": "^1.1.0",
+    "gulp-useref": "^1.1.1",
+    "gulp-util": "^3.0.4",
+    "gulp-watch": "^4.2.4",
+    "lazypipe": "^0.2.4",
+    "main-bower-files": "^2.8.2",
+    "require-dir": "^0.3.0",
+    "wiredep": "^2.2.2",
+    "yargs": "^3.8.0"
+  }
+}
