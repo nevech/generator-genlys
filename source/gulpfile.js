@@ -23,10 +23,6 @@ gulp.task('clean:serve', function (cb) {
   del(config.destDir, cb);
 });
 
-gulp.task('clean:dist', function (cb) {
-  del(config.buildDir, cb);
-});
-
 var serveTasks = [
   'assets',
   'fonts',
@@ -66,36 +62,6 @@ gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
   gulp.watch('bower.json', ['wiredep', 'fonts', browserSync.reload]);
 });
 
-gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
-  var assets = $.useref.assets({searchPath: ['.', config.destDir]});
-
-  return gulp.src(config.destDir + '/**/*.html')
-    .pipe(assets)
-    .pipe($.if('*.js', $.uglify(), $.rev() ))
-    .pipe($.if('*.css', $.minifyCss(), $.rev() ))
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe($.revReplace())
-    .pipe($.if('*.html', $.minifyHtml({
-      empty: true,
-      spare: true
-    })))
-    .pipe(gulp.dest(config.buildDir));
-});
-
-gulp.task('build', ['clean:dist'], function () {
-
-  gulp.start([
-    'fonts:dist',
-    'images:dist',
-    'ngConfig',
-    'compile:dist',
-    'robotstxt'
-  ], function () {
-    del('.tmp');
-  });
-
-});
 
 gulp.task('serve:dist', function () {
   browserSync.init({
