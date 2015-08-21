@@ -1,8 +1,7 @@
 {
-  "name": "<%= appName %>",
-  "description": "<%= appName %>",
-  "version": "0.0.1",
-  "main": "gulp.js",
+  "name": "genlys",
+  "description": "genlys",
+  "version": "0.0.0",
   "devDependencies": {
     "browser-sync": "^2.6.4",
     "connect-modrewrite": "^0.8.1",

@@ -3,8 +3,7 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var mkdirp = require('mkdirp');
-var _ = require('underscore');
-var s = require('underscore.string');
+var _ = require('lodash');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
@@ -32,7 +31,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (answers) {
       this.options = answers;
-      this.options.appName = s.camelize(answers.appName);
+      this.options.appName = _.camelCase(answers.appName);
 
       done();
     }.bind(this));
@@ -59,7 +58,6 @@ module.exports = yeoman.generators.Base.extend({
     bower: function () {
       var bower = {
         name: this.options.appName,
-        private: true,
         version: '0.0.0',
         dependencies: {
           'angular': '^1.4.2',
@@ -82,11 +80,18 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     packageJSON: function () {
-      this.fs.copyTpl(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json'),
-        this.options
-      );
+      var pathToPackage = this.sourceRoot() + '/_package.json';
+      var devDependencies = require(pathToPackage).devDependencies;
+
+      var packageJSON = {
+        name: this.options.appName,
+        description: this.options.appName,
+        version: '0.0.0',
+        main: 'gulpfile.js'
+        devDependencies: devDependencies
+      };
+
+      this.write('package.json', JSON.stringify(packageJSON, null, 2));
     },
 
     genlys: function () {
