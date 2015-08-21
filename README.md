@@ -4,8 +4,6 @@
 
 ![](http://i.imgur.com/BTrI11y.png)
 ## Features
-Look at [gulpfile.js](https://github.com/nevech/generator-genlys/blob/master/app/templates/gulpfile.js) to see detailed information about supported features.
-
 * MVC project structure
 * Includes basic dependence for Angular
 * Dynamically creates configuration file for angular from config.json using NODE_ENV or arguments from the console.
