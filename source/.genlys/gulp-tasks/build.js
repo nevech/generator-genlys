@@ -33,7 +33,7 @@ gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], fun
 
 gulp.task('build', ['clean:dist'], function () {
 
-  gulp.start([
+  return gulp.start([
     'fonts:dist',
     'images:dist',
     'ngConfig',

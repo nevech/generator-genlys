@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var prompt = require('gulp-prompt');
 
 gulp.task('default', function () {
-  gulp.src('package.json')
+  return gulp.src('package.json')
     .pipe(prompt.prompt({
       type: 'list',
       name: 'task',
