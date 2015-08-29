@@ -87,7 +87,7 @@ module.exports = yeoman.generators.Base.extend({
         name: this.options.appName,
         description: this.options.appName,
         version: '0.0.0',
-        main: 'gulpfile.js'
+        main: 'gulpfile.js',
         devDependencies: devDependencies
       };
 
