@@ -17,7 +17,7 @@ module.exports = {
   // 1) Get from command line arguments. Example: gulp task_name --env=production
   // 2) Get from environment variable (process.env.NODE_ENV)
   // 3) Or set default development
-  'env': args.env || process.env.NODE_ENV || 'development',
+  'env': args.env || process.env.NODE_ENV || 'local',
 
   // Option for autoprefixer. See: https://github.com/postcss/autoprefixer-core#usage
   'autoprefixer': {
