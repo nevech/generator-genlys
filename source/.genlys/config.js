@@ -20,7 +20,7 @@ config.isCompileJS = function () {
 };
 
 config.getPathToNgConfig = function () {
-  return 'configs/ng_config/' + config.env + '.json';
+  return 'configs/constants/angular/' + config.env + '.json';
 };
 
 config.optionLoadPlugins = {
