@@ -24,6 +24,19 @@ module.exports = {
     'browsers': ['> 2%']
   },
 
+  // Configs for environments
+  'environments': {
+
+    'development': {
+      'compressFiles': false
+    },
+
+    'production': {
+      'compressFiles': true
+    }
+
+  }
+
   'paths': {
     'scripts': 'app/scripts/**/*.{js,coffee}',
     'coffee': 'app/scripts/**/*.coffee',
@@ -41,14 +54,5 @@ module.exports = {
       '!app/public/fonts',
     ]
   },
-
-  // Configs for environments
-  'development': {
-    'compileCss': false
-  },
-
-  'production': {
-    'isMinifyCss': true
-  }
 
 };

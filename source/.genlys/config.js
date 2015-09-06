@@ -1,5 +1,5 @@
 var config = require('../configs/gulpconfig.js');
-var configENV = config[config.env];
+var configENV = config.environments[config.env];
 
 function getConfigENV (name, defaultValue) {
   var defaultValue = defaultValue || true;
@@ -11,12 +11,8 @@ function getConfigENV (name, defaultValue) {
   return configENV[name];
 }
 
-config.isCompileCSS = function () {
-  return getConfigENV('compileCss');
-};
-
-config.isCompileJS = function () {
-  return getConfigENV('compileJs');
+config.isCompressCSS = function () {
+  return getConfigENV('compileFiles');
 };
 
 config.getPathToNgConfig = function () {
