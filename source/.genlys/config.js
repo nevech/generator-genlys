@@ -1,3 +1,4 @@
+var fs = require('fs');
 var config = require('../configs/gulpconfig.js');
 var configENV = config.environments[config.env];
 
@@ -17,6 +18,12 @@ config.isCompressCSS = function () {
 
 config.getPathToNgConfig = function () {
   return 'configs/constants/angular/' + config.env + '.json';
+};
+
+config.getConstants = function (from) {
+  var path = 'configs/constants/' + from + '/' + config.env + '.json';
+
+  return JSON.parse(fs.readFileSync(path, { encoding: 'utf8' }))
 };
 
 config.optionLoadPlugins = {
