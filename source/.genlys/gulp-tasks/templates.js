@@ -4,7 +4,6 @@ var gulpsync = require('gulp-sync')(gulp);
 var gulpif = require('gulp-if');
 var jade = require('gulp-jade');
 var lazypipe = require('lazypipe');
-var gulpData = require('gulp-data');
 
 var browserSync = require('../browser-sync');
 var wiredep = require('wiredep').stream;
