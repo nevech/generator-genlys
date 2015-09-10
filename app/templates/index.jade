@@ -1,7 +1,7 @@
 doctype html
 html(ng-app="<%= options.appName %>")
   head
-    base(href="/")
+    base(href="#{basePath}")
     title(ng-bind="Page.getTitle()")
 
     meta(charset="utf-8")

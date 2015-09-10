@@ -1,15 +1,19 @@
+var fs = require('fs');
 var gulp = require('gulp');
 var gulpsync = require('gulp-sync')(gulp);
+var gulpif = require('gulp-if');
+var jade = require('gulp-jade');
 var lazypipe = require('lazypipe');
+var gulpData = require('gulp-data');
 
 var browserSync = require('../browser-sync');
 var wiredep = require('wiredep').stream;
 
 var config = require('../config');
-var $ = require('gulp-load-plugins')(config.optionLoadPlugins);
 
 var jadeOptions = {
-  pretty: true
+  pretty: true,
+  locals: config.getConstants('jade')
 };
 
 gulp.task('wiredep', function () {
@@ -23,7 +27,7 @@ gulp.task('wiredep', function () {
 
 gulp.task('templates', ['wiredep'], function () {
   return gulp.src(config.paths.templates)
-    .pipe($.if('*.jade', $.jade(jadeOptions)))
+    .pipe(gulpif('*.jade', jade(jadeOptions)))
     .pipe(gulp.dest(config.destDir));
 });
 
@@ -34,7 +38,7 @@ gulp.task('html', function () {
 
 gulp.task('jade', function () {
   return gulp.src(config.paths.jade)
-    .pipe($.jade(jadeOptions))
+    .pipe(jade(jadeOptions))
     .pipe(gulp.dest(config.destDir));
 });
 
