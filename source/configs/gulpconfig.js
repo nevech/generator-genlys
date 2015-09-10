@@ -35,7 +35,7 @@ module.exports = {
       'compressFiles': true
     }
 
-  }
+  },
 
   'paths': {
     'scripts': 'app/scripts/**/*.{js,coffee}',
