@@ -15,7 +15,7 @@ var coffeeOptions = {
   bare: true
 };
 
-var scriptsTasks = lazypipe()
+var jsTasks = lazypipe()
   .pipe(ngAnnotate)
   .pipe(function () {
     return gulp.dest(config.destDir + '/scripts');
@@ -24,24 +24,32 @@ var scriptsTasks = lazypipe()
     return reload({stream: true});
   });
 
-gulp.task('scripts', function () {
+function scriptsStream (dest) {
   return gulp.src(config.paths.scripts)
     .pipe(gulpif('*.coffee', coffee(coffeeOptions)))
     .pipe(ngAnnotate())
-    .pipe(gulp.dest(config.destDir + '/scripts'));
+    .pipe(gulp.dest(dest));
+}
+
+gulp.task('scripts', function () {
+  return scriptsStream(config.destDir + '/scripts');
+});
+
+gulp.task('scripts:dist', function () {
+  return scriptsStream(config.buildDir + '/scripts');
 });
 
 gulp.task('js:watch', function () {
   return gulp.src(config.paths.js)
     .pipe(watch(config.paths.js, {verbose: true}))
-    .pipe(scriptsTasks());
+    .pipe(jsTasks());
 });
 
 gulp.task('coffee:watch', function () {
   return gulp.src(config.paths.coffee)
     .pipe(watch(config.paths.coffee, {verbose: true}))
     .pipe(coffee(coffeeOptions))
-    .pipe(scriptsTasks());
+    .pipe(jsTasks());
 });
 
 gulp.task('scripts:watch', ['js:watch', 'coffee:watch']);
