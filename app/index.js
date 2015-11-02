@@ -80,15 +80,15 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     packageJSON: function () {
-      var pathToPackage = this.sourceRoot() + '/_package.json';
-      var devDependencies = require(pathToPackage).devDependencies;
+      var packageFile = require(this.sourceRoot() + '/_package.json');
 
       var packageJSON = {
         name: this.options.appName,
         description: this.options.appName,
         version: '0.0.0',
         main: 'gulpfile.js',
-        devDependencies: devDependencies
+        devDependencies: packageFile.devDependencies,
+        scripts: packageFile.scripts
       };
 
       this.write('package.json', JSON.stringify(packageJSON, null, 2));
