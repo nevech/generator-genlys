@@ -8,7 +8,8 @@ var pathToLintConfig = path.resolve(__dirname, '../../', 'configs/coffeelint.jso
 
 gulp.task('lint', function () {
   gulp.src(config.paths.coffee)
-    .pipe(coffeelint(pathToLintConfig, null, true))
+    .pipe(coffeelint(pathToLintConfig))
+    .pipe(coffeelint.reporter('coffeelint-stylish'))
     .pipe(coffeelint.reporter('fail'));
 });
 
