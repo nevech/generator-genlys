@@ -6,13 +6,12 @@
 ## Features
 * MVC project structure
 * Includes basic dependence for Angular
-* Dynamically creates configuration file for angular from config.json using NODE_ENV or arguments from the console.
+* Configuring application
 * Automatically compile [Jade](jade-lang.com), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
 * Automatically wire-up dependencies installed with [Bower](http://bower.io/)
 * Built-in preview server with [BrowserSync](http://www.browsersync.io/)
 * CSS Autoprefixing
 * Awesome image optimization
-
 
 ## Installation
 
