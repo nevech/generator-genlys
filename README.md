@@ -22,4 +22,4 @@
 * [Getting Started](https://github.com/nevech/generator-genlys/blob/master/docs/README.md)
 
 ## License
-MIT license
+[The MIT License](./LICENSE)
