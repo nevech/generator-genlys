@@ -39,7 +39,7 @@
     "gulp-stylus": "^2.0.1",
     "gulp-sync": "^0.1.4",
     "gulp-uglify": "^1.1.0",
-    "gulp-useref": "^1.1.1",
+    "gulp-useref": "^2.0.1",
     "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4",
     "lazypipe": "^0.2.4",
