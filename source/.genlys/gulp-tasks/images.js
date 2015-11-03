@@ -6,7 +6,7 @@ var reload = require('../browser-sync').reload;
 var config = require('../config');
 
 var imageminTask = lazypipe()
-  .pipe(function imagemin() {
+  .pipe(function imageMin() {
     return imagemin({
       optimizationLevel: 3,
       progressive: true,
