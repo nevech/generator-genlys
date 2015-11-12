@@ -19,7 +19,10 @@
 * Install the generator: `npm install -g generator-genlys`
 
 ## Documentation
-* [Getting Started](https://github.com/nevech/generator-genlys/blob/master/docs/README.md)
+
+- [Getting Started](./getting-started.md)
+- [General tasks](./general-tasks.md)
+- [Configuring application](./configuring.md)
 
 ## License
 [The MIT License](./LICENSE)
