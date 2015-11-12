@@ -10,6 +10,9 @@ module.exports = {
   // Current build directory
   'releaseDirname': 'current',
 
+  // Number of releases to keep
+  'keepReleases': 2,
+
   // HTTP port for browser-sync
   'port': process.env.PORT || 9000,
 

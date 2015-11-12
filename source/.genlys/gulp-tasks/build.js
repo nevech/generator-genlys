@@ -8,14 +8,10 @@ var useref = require('gulp-useref');
 var minifyHtml = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
 var revReplace = require('gulp-rev-replace');
+var fs = require('fs');
+
 var config = require('../config');
-
-function updateCurrentReleaseSymlink() {
-  var releasePath = config.getReleasePath();
-  var currentReleasePath = config.getCurrentReleasePath();
-
-  symlink(releasePath, currentReleasePath);
-}
+var releases = require('../releases');
 
 gulp.task('compile', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
   var assets = useref.assets({searchPath: ['.', config.destDir]});
@@ -45,7 +41,8 @@ gulp.task('build', function () {
   ];
 
   return gulp.start(buildTasks, function () {
-    updateCurrentReleaseSymlink();
+    releases.updateCurrentReleaseLink();
+    releases.cleanOldReleases();
     del('.tmp');
   });
 
