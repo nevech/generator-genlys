@@ -7,8 +7,8 @@ module.exports = {
   // Destination directory
   'destDir': '.tmp',
 
-  // Build directory
-  'buildDir': 'dist',
+  // Current build directory
+  'releaseDirname': 'current',
 
   // HTTP port for browser-sync
   'port': process.env.PORT || 9000,
