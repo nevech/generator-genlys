@@ -14,7 +14,7 @@ gulp.task('clean:dist', function (cb) {
   del(config.buildDir, cb);
 });
 
-gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
+gulp.task('compile', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
   var assets = useref.assets({searchPath: ['.', config.destDir]});
 
   return gulp.src(config.destDir + '/**/*.html')
@@ -37,7 +37,7 @@ gulp.task('build', ['clean:dist'], function () {
     'fonts:dist',
     'images:dist',
     'ngConfig',
-    'compile:dist',
+    'compile',
     'robotstxt'
   ], function () {
     del('.tmp');
