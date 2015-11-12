@@ -31,5 +31,5 @@ gulp.task('images:watch', function () {
 gulp.task('images:dist', function () {
   return gulp.src(config.paths.images)
     .pipe(imageminTask())
-    .pipe(gulp.dest(config.buildDir + '/images'));
+    .pipe(gulp.dest(config.getReleasePath() + '/images'));
 });

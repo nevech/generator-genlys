@@ -17,5 +17,5 @@ gulp.task('assets:watch', function () {
 
 gulp.task('assets:dist', function () {
   return gulp.src(config.paths.assets)
-    .pipe(gulp.dest(config.buildDir));
+    .pipe(gulp.dest(config.getReleasePath()));
 });

@@ -36,7 +36,7 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('scripts:dist', function () {
-  return scriptsStream(config.buildDir + '/scripts');
+  return scriptsStream(config.getReleasePath() + '/scripts');
 });
 
 gulp.task('js:watch', function () {

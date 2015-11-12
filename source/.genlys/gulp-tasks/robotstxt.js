@@ -35,7 +35,7 @@ gulp.task('robotstxt', function (callback) {
       .pipe(rename(function (file) {
         file.basename = "robots";
       }))
-      .pipe(gulp.dest(config.buildDir))
+      .pipe(gulp.dest(config.getReleasePath()))
       .on('end', function () {
         gutil.log('Used ', gutil.colors.green(path), 'for robots.txt');
         callback();
