@@ -16,11 +16,11 @@ var serveTasks = [
   'ngConfig'
 ];
 
-gulp.task('clean:serve', function (cb) {
+gulp.task('clean:dev', function (cb) {
   del(config.destDir, cb);
 });
 
-gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
+gulp.task('dev', gulpsync.sync(['clean:dev', serveTasks]), function () {
   browserSync.init({
     notify: false,
     port: config.port,
@@ -49,13 +49,7 @@ gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
   gulp.watch('bower.json', ['wiredep', 'fonts', browserSync.reload]);
 });
 
-
-gulp.task('serve:dist', function () {
-  browserSync.init({
-    notify: false,
-    port: config.port,
-    server: {
-      baseDir: ['dist'],
-    }
-  });
+gulp.task('serve', function () {
+  console.log('Task `serve` is deprecated and will be removed in v1.0.0. Use `dev` task.');
+  gulp.start('dev');
 });
