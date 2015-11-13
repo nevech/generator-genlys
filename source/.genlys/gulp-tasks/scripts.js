@@ -15,6 +15,10 @@ var coffeeOptions = {
   bare: true
 };
 
+var watchOptions = {
+  verbose: true
+};
+
 var jsTasks = lazypipe()
   .pipe(ngAnnotate)
   .pipe(function () {
@@ -66,20 +70,20 @@ gulp.task('ngConfig:watch', function () {
   var src = config.getPathToNgConfig();
 
   return gulp.src(src)
-    .pipe(watch(src, {verbose: true}))
+    .pipe(watch(src, watchOptions))
     .pipe(ngConfigTasks())
     .pipe(reload({stream: true}));
 });
 
 gulp.task('js:watch', function () {
   return gulp.src(config.paths.js)
-    .pipe(watch(config.paths.js, {verbose: true}))
+    .pipe(watch(config.paths.js, watchOptions))
     .pipe(jsTasks());
 });
 
 gulp.task('coffee:watch', function () {
   return gulp.src(config.paths.coffee)
-    .pipe(watch(config.paths.coffee, {verbose: true}))
+    .pipe(watch(config.paths.coffee, watchOptions))
     .pipe(coffee(coffeeOptions))
     .pipe(jsTasks());
 });
