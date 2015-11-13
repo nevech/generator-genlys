@@ -24,6 +24,22 @@ var jsTasks = lazypipe()
     return reload({stream: true});
   });
 
+var ngConfigTasks = lazypipe()
+  .pipe(function () {
+    return ngConfig(config.ngApp, {
+      createModule: false,
+    });
+  })
+  .pipe(function () {
+    return rename(function (path) {
+      path.basename = 'config';
+      path.extname = '.js';
+    });
+  })
+  .pipe(function () {
+    return gulp.dest(config.destDir + '/scripts/configs')
+  });
+
 function scriptsStream (dest) {
   return gulp.src(config.paths.scripts)
     .pipe(gulpif('*.coffee', coffee(coffeeOptions)))
@@ -39,6 +55,22 @@ gulp.task('scripts:dist', function () {
   return scriptsStream(config.getReleasePath() + '/scripts');
 });
 
+gulp.task('ngConfig', function () {
+  var src = config.getPathToNgConfig();
+
+  return gulp.src(src)
+    .pipe(ngConfigTasks());
+});
+
+gulp.task('ngConfig:watch', function () {
+  var src = config.getPathToNgConfig();
+
+  return gulp.src(src)
+    .pipe(watch(src, {verbose: true}))
+    .pipe(ngConfigTasks())
+    .pipe(reload({stream: true}));
+});
+
 gulp.task('js:watch', function () {
   return gulp.src(config.paths.js)
     .pipe(watch(config.paths.js, {verbose: true}))
@@ -52,18 +84,6 @@ gulp.task('coffee:watch', function () {
     .pipe(jsTasks());
 });
 
-gulp.task('scripts:watch', ['js:watch', 'coffee:watch']);
+gulp.task('scripts:watch', ['js:watch', 'coffee:watch', 'ngConfig:watch']);
 
-gulp.task('ngConfig', function () {
-  var src = config.getPathToNgConfig();
 
-  return gulp.src(src)
-    .pipe(ngConfig(config.ngApp, {
-      createModule: false,
-    }))
-    .pipe(rename(function (path) {
-      path.basename = 'config';
-      path.extname = '.js';
-    }))
-    .pipe(gulp.dest(config.destDir + '/scripts/configs'))
-});
