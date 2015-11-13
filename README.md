@@ -20,9 +20,9 @@
 
 ## Documentation
 
-- [Getting Started](./getting-started.md)
-- [General tasks](./general-tasks.md)
-- [Configuring application](./configuring.md)
+- [Getting Started](./docs/getting-started.md)
+- [General tasks](./docs/general-tasks.md)
+- [Configuring application](./docs/configuring.md)
 
 ## License
 [The MIT License](./LICENSE)
