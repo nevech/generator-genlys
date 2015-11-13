@@ -47,6 +47,7 @@
     "lazypipe": "^0.2.4",
     "main-bower-files": "^2.8.2",
     "moment": "^2.10.6",
+    "remove": "^0.1.5",
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
     "wiredep": "^2.2.2",
