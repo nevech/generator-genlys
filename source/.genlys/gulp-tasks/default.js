@@ -8,7 +8,7 @@ gulp.task('default', function () {
       name: 'task',
       message: 'What do you want to do?',
       choices: [
-        'serve',
+        'dev',
         'build'
       ]
     }, function (answer) {
