@@ -44,5 +44,4 @@ config.getCurrentReleasePath = function () {
   return path.resolve('releases', releaseDirname);
 };
 
-
 module.exports = config;
