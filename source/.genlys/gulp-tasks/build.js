@@ -11,7 +11,7 @@ var revReplace = require('gulp-rev-replace');
 var fs = require('fs');
 
 var config = require('../config');
-var releases = require('../releases');
+var releases = require('../libs/releases');
 
 gulp.task('compile', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
   var assets = useref.assets({searchPath: ['.', config.destDir]});
@@ -31,7 +31,6 @@ gulp.task('compile', ['templates', 'scripts', 'styles', 'assets:dist'], function
 });
 
 gulp.task('build', function () {
-
   var buildTasks = [
     'fonts:dist',
     'images:dist',
@@ -41,8 +40,8 @@ gulp.task('build', function () {
   ];
 
   return gulp.start(buildTasks, function () {
-    releases.updateCurrentReleaseLink();
-    releases.cleanOldReleases();
+    releases.rollbackToLast(releasePath);
+    releases.cleanOld();
     del('.tmp');
   });
 

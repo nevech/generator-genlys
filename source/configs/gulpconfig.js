@@ -11,7 +11,7 @@ module.exports = {
   'releaseDirname': 'current',
 
   // Number of releases to keep
-  'keepReleases': 2,
+  'keepReleases': 5,
 
   // HTTP port for browser-sync
   'port': process.env.PORT || 9000,
@@ -45,15 +45,15 @@ module.exports = {
   },
 
   'paths': {
-    'scripts': 'app/scripts/**/*.{js,coffee}',
-    'coffee': 'app/scripts/**/*.coffee',
-    'js': 'app/scripts/**/*.js',
+    'scripts': 'app/**/*.{js,coffee}',
+    'coffee': 'app/**/*.coffee',
+    'js': 'app/**/*.js',
     'templates': 'app/**/*.{jade,html}',
     'jade': 'app/**/*.jade',
     'html': 'app/**/*.html',
-    'styles': 'app/styles/**/*.{styl,css}',
-    'stylus': 'app/styles/**/*.styl',
-    'css': 'app/styles/**/*.css',
+    'styles': 'app/**/*.{styl,css}',
+    'stylus': 'app/**/*.styl',
+    'css': 'app/**/*.css',
     'images': 'app/public/images/**/*.{jpg,png,jpeg}',
     'assets': [
       'app/public/**/*',

@@ -39,7 +39,7 @@ config.getReleasePath = (function () {
 
 })();
 
-config.getCurrentReleasePath = function () {
+config.getSymlinkPath = function () {
   var releaseDirname = config.releaseDirname || 'current';
   return path.resolve('releases', releaseDirname);
 };
