@@ -56,18 +56,19 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     bower: function () {
+      var angularVersion = '1.4.8';
       var bower = {
         name: this.options.appName,
         version: '0.0.0',
         dependencies: {
-          'angular': '^1.4.2',
-          'angular-resource': '^1.4.2',
-          'angular-cookies': '^1.4.2',
-          'angular-route': '^1.4.2',
+          'angular': '^' + angularVersion,
+          'angular-resource': '^' + angularVersion,
+          'angular-cookies': '^' + angularVersion,
+          'angular-route': '^' + angularVersion,
           'normalize.css': '^3.0.2'
         },
         resolutions: {
-          'angular': '>=1.4.2'
+          'angular': '>=' + angularVersion
         }
       };
 
