@@ -39,9 +39,8 @@ gulp.task('build', function () {
     'robotstxt'
   ];
 
-  return gulp.start(buildTasks, function () {
-    releases.rollbackToLast(releasePath);
-    releases.cleanOld();
+  return gulp.start(buildTasks, function (done) {
+    releases.create(done);
     del('.tmp');
   });
 

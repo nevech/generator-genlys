@@ -8,32 +8,17 @@ var Release = require('../classes/release');
 
 var releases = module.exports = {};
 
-releases.rollbackToLast = function () {
-  var symlinkPath = config.getSymlinkPath();
-};
-
-releases.updateCurrentSymlink = function (releasePath) {
+releases.create = function (done) {
   var releasePath = config.getReleasePath();
+  var release = Release.getByPath(releasePath);
 
-  symlink(releasePath, releasePath, 'dir');
-};
-
-releases.cleanOld = function () {
-  var keepReleases = config.keepReleases || 2;
-  var releases = getReleases();
-  var countReleases = releases.length;
-  var countOldReleases = countReleases - keepReleases;
-
-  if (countOldReleases <= 0) {
-    return;
+  if (!release) {
+    return done('Release not found');
   }
 
-  var oldReleases = releases.slice(0, countOldReleases);
-
-  _.each(oldReleases, function (release) {
-    if (!release.isCurrent()) {
-      release.removeSync();
-    }
+  release.setCurrent(function () {
+    cleanOldReleases();
+    done();
   });
 };
 
@@ -51,12 +36,19 @@ releases.rollback = function (to, done) {
   var releases = getReleases();
   var indexRelease = releases.length - 1 - to;
   var release = releases[indexRelease];
+  var currentRelease = Release.getCurrent();
 
   if (!release) {
     return done('Release not found');
   }
 
-  release.setCurrent(done);
+  release.setCurrent(function (err) {
+    if (!err && currentRelease) {
+      currentRelease.removeSync();
+    }
+
+    done(err);
+  });
 };
 
 function getReleases (callback) {
@@ -66,20 +58,31 @@ function getReleases (callback) {
 
   _.each(files, function (fileName) {
     var filePath = path.resolve('releases', fileName);
-    var stats = fs.statSync(filePath);
-    var nameRE = /^\d{4}-\d{2}-\d{2}_\d{2}:\d{2}:\d{2}$/;
+    var release = Release.getByPath(filePath);
 
-    if (stats.isDirectory() && nameRE.test(fileName)) {
-      var release = new Release({
-        name: fileName,
-        path: filePath,
-        ctime: stats.ctime,
-        stats: stats
-      });
-
+    if (release) {
       releases.push(release);
     }
   });
 
   return _.sortBy(releases, 'ctime');
+}
+
+function cleanOldReleases () {
+  var keepReleases = config.keepReleases || 2;
+  var releases = getReleases();
+  var countReleases = releases.length;
+  var countOldReleases = countReleases - keepReleases;
+
+  if (countOldReleases <= 0) {
+    return;
+  }
+
+  var oldReleases = releases.slice(0, countOldReleases);
+
+  _.each(oldReleases, function (release) {
+    if (!release.isCurrent()) {
+      release.removeSync();
+    }
+  });
 }
