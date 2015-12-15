@@ -25,7 +25,7 @@ gulp.task('dev', gulpsync.sync(['clean:dev', serveTasks]), function () {
     notify: false,
     port: config.port,
     server: {
-      baseDir: ['.tmp'],
+      baseDir: [config.destDir],
       routes: {
         '/bower_components': 'bower_components'
       },

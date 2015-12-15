@@ -5,7 +5,7 @@ module.exports = {
   'ngApp': 'genlys',
 
   // Destination directory
-  'destDir': '.tmp',
+  'destDir': 'releases/tmp',
 
   // Current build directory
   'releaseDirname': 'current',

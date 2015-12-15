@@ -41,7 +41,7 @@ gulp.task('build', function () {
 
   return gulp.start(buildTasks, function (done) {
     releases.create(done);
-    del('.tmp');
+    del(config.destDir);
   });
 
 });

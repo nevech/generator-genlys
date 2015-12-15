@@ -42,10 +42,12 @@ gulp.task('jade', function () {
 });
 
 gulp.task('templates:watch', function  () {
+  var src = config.destDir + "/*.html";
+
   gulp.watch(config.paths.html, ['html']);
   gulp.watch(config.paths.jade, ['jade']);
 
-  gulp.watch(".tmp/*.html").on('change', function (argument) {
+  gulp.watch(src).on('change', function (argument) {
     browserSync.reload();
   });
 });
