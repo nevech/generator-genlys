@@ -47,6 +47,7 @@ module.exports = {
   // Config for module fsdk. See: https://github.com/nevech/fsdk
   'fsdk': {
     'src': 'sdk/**/*.*',
+    'dest': 'sdk',
     'env': 'app'
   },
 
