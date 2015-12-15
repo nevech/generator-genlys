@@ -20,7 +20,7 @@ var compileTasks = (function () {
   if (config.fsdk) {
     tasks.unshift(['sdk:compile'])
   }
-  console.log(tasks);
+
   return tasks;
 })();
 
