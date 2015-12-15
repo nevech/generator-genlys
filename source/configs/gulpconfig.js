@@ -44,6 +44,12 @@ module.exports = {
 
   },
 
+  // Config for module fsdk. See: https://github.com/nevech/fsdk
+  'fsdk': {
+    'src': 'sdk/**/*.*',
+    'env': 'app'
+  },
+
   'paths': {
     'scripts': 'app/**/*.{js,coffee}',
     'coffee': 'app/**/*.coffee',
