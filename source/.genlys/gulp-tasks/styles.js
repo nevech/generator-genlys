@@ -14,7 +14,7 @@ var stylesTasks = lazypipe()
     return autoprefixer(config.autoprefixer);
   })
   .pipe(function () {
-    return gulp.dest(config.destDir + '/styles');
+    return gulp.dest(config.destDir);
   })
   .pipe(function () {
     return reload({stream: true});
@@ -24,7 +24,7 @@ gulp.task('styles', function () {
   return gulp.src(config.paths.styles)
     .pipe(gulpif('*.styl', stylus()))
     .pipe(autoprefixer(config.autoprefixer))
-    .pipe(gulp.dest(config.destDir + '/styles'));
+    .pipe(gulp.dest(config.destDir));
 });
 
 gulp.task('css:watch', function () {

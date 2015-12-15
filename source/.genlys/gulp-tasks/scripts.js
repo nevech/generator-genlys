@@ -22,7 +22,7 @@ var watchOptions = {
 var jsTasks = lazypipe()
   .pipe(ngAnnotate)
   .pipe(function () {
-    return gulp.dest(config.destDir + '/scripts');
+    return gulp.dest(config.destDir);
   })
   .pipe(function () {
     return reload({stream: true});
@@ -52,11 +52,11 @@ function scriptsStream (dest) {
 }
 
 gulp.task('scripts', function () {
-  return scriptsStream(config.destDir + '/scripts');
+  return scriptsStream(config.destDir);
 });
 
 gulp.task('scripts:dist', function () {
-  return scriptsStream(config.getReleasePath() + '/scripts');
+  return scriptsStream(config.getReleasePath());
 });
 
 gulp.task('ngConfig', function () {
