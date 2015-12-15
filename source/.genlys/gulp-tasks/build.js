@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gulpsync = require('gulp-sync')(gulp);
 var del = require('del');
 var symlink = require('fs-symlink');
 var gulpif = require('gulp-if');
@@ -13,7 +14,17 @@ var fs = require('fs');
 var config = require('../config');
 var releases = require('../libs/releases');
 
-gulp.task('compile', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
+var compileTasks = (function () {
+  var tasks = ['templates', 'scripts', 'styles', 'assets:dist'];
+
+  if (config.fsdk) {
+    tasks.unshift(['sdk:compile'])
+  }
+  console.log(tasks);
+  return tasks;
+})();
+
+gulp.task('compile', gulpsync.sync(compileTasks), function () {
   var assets = useref.assets({searchPath: ['.', config.destDir]});
 
   return gulp.src(config.destDir + '/**/*.html')

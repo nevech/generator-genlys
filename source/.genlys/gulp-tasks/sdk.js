@@ -10,7 +10,7 @@ gulp.task('sdk:compile', function () {
 
   return gulp.src(fsdkConfig.src)
     .pipe(fsdk.parseFile(fsdkConfig.env))
-    .pipe(gulp.dest(config.destDir));
+    .pipe(gulp.dest(dest));
 });
 
 gulp.task('sdk:watch', function () {
