@@ -37,14 +37,20 @@ gulp.task('dev', gulpsync.sync(['clean:dev', serveTasks]), function () {
     }
   });
 
-  gulp.start([
+  var tasks = [
     'styles:watch',
     'templates:watch',
     'scripts:watch',
     'images:watch',
     'fonts:watch',
     'assets:watch'
-  ]);
+  ];
+
+  if (config.fsdk) {
+    tasks.push('sdk:watch');
+  }
+
+  gulp.start(tasks);
 
   gulp.watch('bower.json', ['wiredep', 'fonts', browserSync.reload]);
 });

@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var path = require('path');
 var fsdk = require('fsdk');
+var watch = require('gulp-watch');
+var reload = require('../browser-sync').reload;
 var config = require('../config');
 
 var fsdkConfig = config.fsdk;
