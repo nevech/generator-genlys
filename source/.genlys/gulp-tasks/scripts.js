@@ -1,15 +1,14 @@
-var config = require('../config');
+var gulp = require('gulp');
+var watch = require('gulp-watch');
+var coffee = require('gulp-coffee');
+var filter = require('gulp-filter');
+var rename = require('gulp-rename');
+var ngConfig = require('gulp-ng-config');
+var ngAnnotate = require('gulp-ng-annotate');
 var lazypipe = require('lazypipe');
-var reload = require('../browser-sync').reload;
 
-var gulp = require('gulp'),
-    gulpif = require('gulp-if'),
-    watch = require('gulp-watch'),
-    coffee = require('gulp-coffee'),
-    filter = require('gulp-filter'),
-    rename = require('gulp-rename'),
-    ngConfig = require('gulp-ng-config'),
-    ngAnnotate = require('gulp-ng-annotate');
+var config = require('../config');
+var reload = require('../browser-sync').reload;
 
 var coffeeOptions = {
   bare: true
@@ -19,20 +18,13 @@ var watchOptions = {
   verbose: true
 };
 
-var jsTasks = lazypipe()
-  .pipe(ngAnnotate)
-  .pipe(function () {
-    return gulp.dest(config.destDir);
-  })
-  .pipe(function () {
-    return reload({stream: true});
-  });
+var ngConfigOptions = {
+  createModule: false
+};
 
 var ngConfigTasks = lazypipe()
   .pipe(function () {
-    return ngConfig(config.ngApp, {
-      createModule: false,
-    });
+    return ngConfig(config.ngApp, ngConfigOptions);
   })
   .pipe(function () {
     return rename(function (path) {
@@ -45,9 +37,18 @@ var ngConfigTasks = lazypipe()
   });
 
 function scriptsStream (dest) {
+  var coffeeFilter = filter('**/*.coffee', {restore: true});
+  var jsFilter = filter('**/*.js', {restore: true});
+
   return gulp.src(config.paths.scripts)
-    .pipe(gulpif('*.coffee', coffee(coffeeOptions)))
+    .pipe(coffeeFilter)
+    .pipe(coffee(coffeeOptions))
+    .pipe(coffeeFilter.restore)
+
+    .pipe(jsFilter)
     .pipe(ngAnnotate())
+    .pipe(jsFilter.restore)
+
     .pipe(gulp.dest(dest));
 }
 
@@ -75,19 +76,24 @@ gulp.task('ngConfig:watch', function () {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('js:watch', function () {
-  return gulp.src(config.paths.js)
-    .pipe(watch(config.paths.js, watchOptions))
-    .pipe(jsTasks());
-});
+gulp.task('scripts:watch', function () {
+  var coffeeFilter = filter('**/*.coffee', {restore: true});
+  var jsFilter = filter('**/*.js', {restore: true});
+  var src = config.paths.scripts;
 
-gulp.task('coffee:watch', function () {
-  return gulp.src(config.paths.coffee)
-    .pipe(watch(config.paths.coffee, watchOptions))
+  gulp.start('ngConfig:watch');
+
+  return gulp.src(src)
+    .pipe(watch(src, watchOptions))
+
+    .pipe(coffeeFilter)
     .pipe(coffee(coffeeOptions))
-    .pipe(jsTasks());
+    .pipe(coffeeFilter.restore)
+
+    .pipe(jsFilter)
+    .pipe(ngAnnotate())
+    .pipe(jsFilter.restore)
+
+    .pipe(gulp.dest(config.destDir))
+    .pipe(reload({stream: true}));
 });
-
-gulp.task('scripts:watch', ['js:watch', 'coffee:watch', 'ngConfig:watch']);
-
-
