@@ -1,43 +1,46 @@
-var config = require('../config');
+var gulp = require('gulp');
+var gulpif = require('gulp-if');
+var watch = require('gulp-watch');
+var filter = require('gulp-filter');
+var stylus = require('gulp-stylus');
+var autoprefixer = require('gulp-autoprefixer');
 var lazypipe = require('lazypipe');
+
+var config = require('../config');
 var reload = require('../browser-sync').reload;
 
-var gulp = require('gulp'),
-    gulpif = require('gulp-if'),
-    watch = require('gulp-watch'),
-    filter = require('gulp-filter'),
-    stylus = require('gulp-stylus'),
-    autoprefixer = require('gulp-autoprefixer');
-
-var stylesTasks = lazypipe()
-  .pipe(function autoPrefixer() {
-    return autoprefixer(config.autoprefixer);
-  })
-  .pipe(function () {
-    return gulp.dest(config.destDir);
-  })
-  .pipe(function () {
-    return reload({stream: true});
-  });
-
 gulp.task('styles', function () {
+  var stylusFilter = filter('**/*.styl', {restore: true});
+  var cssFilter = filter('**/*.css', {restore: true});
+
   return gulp.src(config.paths.styles)
-    .pipe(gulpif('*.styl', stylus()))
-    .pipe(autoprefixer(config.autoprefixer))
-    .pipe(gulp.dest(config.destDir));
-});
-
-gulp.task('css:watch', function () {
-  return gulp.src(config.paths.css)
-    .pipe(watch(config.paths.css, {verbose: true}))
-    .pipe(stylesTasks());
-});
-
-gulp.task('stylus:watch', function () {
-  return gulp.src(config.paths.stylus)
-    .pipe(watch(config.paths.stylus, {verbose: true}))
+    .pipe(stylusFilter)
     .pipe(stylus())
-    .pipe(stylesTasks());
+    .pipe(stylusFilter.restore)
+
+    .pipe(cssFilter)
+    .pipe(autoprefixer(config.autoprefixer))
+    .pipe(cssFilter.restore)
+
+    .pipe(gulp.dest(config.destDir))
 });
 
-gulp.task('styles:watch', ['css:watch', 'stylus:watch']);
+gulp.task('styles:watch', function () {
+  var stylusFilter = filter('**/*.styl', {restore: true});
+  var cssFilter = filter('**/*.css', {restore: true});
+  var src = config.paths.styles;
+
+  return gulp.src(src)
+    .pipe(watch(src, {verbose: true}))
+
+    .pipe(stylusFilter)
+    .pipe(stylus())
+    .pipe(stylusFilter.restore)
+
+    .pipe(cssFilter)
+    .pipe(autoprefixer(config.autoprefixer))
+    .pipe(cssFilter.restore)
+
+    .pipe(gulp.dest(config.destDir))
+    .pipe(reload({stream: true}));
+});
