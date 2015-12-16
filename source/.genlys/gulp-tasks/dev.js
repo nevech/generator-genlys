@@ -16,11 +16,13 @@ var serveTasks = [
   'ngConfig'
 ];
 
-gulp.task('clean:dev', function (cb) {
-  del(config.destDir, cb);
+gulp.task('clean:tmp', function (done) {
+  del(config.destDir).then(function () {
+    done();
+  });
 });
 
-gulp.task('dev', gulpsync.sync(['clean:dev', serveTasks]), function () {
+gulp.task('dev', gulpsync.sync(['clean:tmp', serveTasks]), function () {
   browserSync.init({
     notify: false,
     port: config.port,
