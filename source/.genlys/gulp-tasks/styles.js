@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var gulpif = require('gulp-if');
 var watch = require('gulp-watch');
 var filter = require('gulp-filter');
 var stylus = require('gulp-stylus');
