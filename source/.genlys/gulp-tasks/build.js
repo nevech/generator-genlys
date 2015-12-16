@@ -10,6 +10,8 @@ var minifyHtml = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
 var revReplace = require('gulp-rev-replace');
 var fs = require('fs');
+var map = require('gulp-map');
+var filter = require('gulp-filter');
 
 var config = require('../config');
 var releases = require('../libs/releases');
@@ -25,19 +27,44 @@ var compileTasks = (function () {
 })();
 
 gulp.task('compile', gulpsync.sync(compileTasks), function () {
-  var assets = useref.assets({searchPath: ['.', config.destDir]});
+  var jsFilter = filter('*.js', {restore: true});
+  var cssFilter = filter('*.css', {restore: true});
+  var htmlFilter = filter('**/*.html', {restore: true});
+  var notIndexFilter = filter(['**/*.*', '!**/*.html'], {restore: true});
 
   return gulp.src(config.destDir + '/**/*.html')
-    .pipe(assets)
-    .pipe(gulpif('*.js', uglify(), rev() ))
-    .pipe(gulpif('*.css', minifyCss(), rev() ))
-    .pipe(assets.restore())
-    .pipe(useref())
-    .pipe(revReplace())
-    .pipe(gulpif('*.html', minifyHtml({
+    .pipe(useref({
+      searchPath: ['.', config.destDir]
+    }))
+    // minify js file
+    .pipe(jsFilter)
+    .pipe(uglify())
+    .pipe(jsFilter.restore)
+
+    // minify css file
+    .pipe(cssFilter)
+    .pipe(minifyCss())
+    .pipe(cssFilter.restore)
+
+    // minify html file
+    .pipe(htmlFilter)
+    .pipe(minifyHtml({
       empty: true,
       spare: true
-    })))
+    }))
+    .pipe(map(function (file) {
+      console.log(file);
+      return file
+    }))
+    .pipe(htmlFilter.restore)
+
+    // rename js and css file
+    .pipe(notIndexFilter)
+    .pipe(rev())
+    .pipe(notIndexFilter.restore)
+
+    .pipe(revReplace())
+
     .pipe(gulp.dest(config.getReleasePath()));
 });
 
@@ -46,8 +73,8 @@ gulp.task('build', function () {
     'fonts:dist',
     'images:dist',
     'ngConfig',
-    'compile',
-    'robotstxt'
+    'robotstxt',
+    'compile'
   ];
 
   return gulp.start(buildTasks, function (done) {
