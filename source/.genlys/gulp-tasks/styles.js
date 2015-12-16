@@ -8,7 +8,7 @@ var lazypipe = require('lazypipe');
 var config = require('../config');
 var reload = require('../browser-sync').reload;
 
-gulp.task('styles', function () {
+function stylesStream (dest) {
   var stylusFilter = filter('**/*.styl', {restore: true});
   var cssFilter = filter('**/*.css', {restore: true});
 
@@ -21,7 +21,15 @@ gulp.task('styles', function () {
     .pipe(autoprefixer(config.autoprefixer))
     .pipe(cssFilter.restore)
 
-    .pipe(gulp.dest(config.destDir))
+    .pipe(gulp.dest(dest));
+}
+
+gulp.task('styles', function () {
+  return stylesStream(config.destDir);
+});
+
+gulp.task('styles:dist', function () {
+  return stylesStream(config.getReleasePath());
 });
 
 gulp.task('styles:watch', function () {
