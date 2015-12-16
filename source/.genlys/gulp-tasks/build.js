@@ -52,10 +52,6 @@ gulp.task('compile', gulpsync.sync(compileTasks), function () {
       empty: true,
       spare: true
     }))
-    .pipe(map(function (file) {
-      console.log(file);
-      return file
-    }))
     .pipe(htmlFilter.restore)
 
     // rename js and css file
