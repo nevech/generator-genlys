@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var jade = require('gulp-jade');
 var filter = require('gulp-filter');
+var watch = require('gulp-watch');
 var wiredep = require('wiredep').stream;
 
 var reload = require('../browser-sync').reload;
