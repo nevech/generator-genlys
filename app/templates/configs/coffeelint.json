@@ -1,0 +1,17 @@
+{
+  "no_empty_param_list": {
+    "level": "error"
+  },
+  "braces_spacing": {
+    "level": "error"
+  },
+  "no_interpolation_in_single_quotes": {
+    "level": "error"
+  },
+  "no_nested_string_interpolation": {
+    "level": "error"
+  },
+  "coffeescript_error": {
+    "level": "ignore"
+  }
+}

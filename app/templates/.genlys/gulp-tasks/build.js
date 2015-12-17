@@ -1,5 +1,7 @@
 var gulp = require('gulp');
+var gulpsync = require('gulp-sync')(gulp);
 var del = require('del');
+var symlink = require('fs-symlink');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var rev = require('gulp-rev');
@@ -7,40 +9,73 @@ var useref = require('gulp-useref');
 var minifyHtml = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
 var revReplace = require('gulp-rev-replace');
+var fs = require('fs');
+var map = require('gulp-map');
+var filter = require('gulp-filter');
 
 var config = require('../config');
+var releases = require('../libs/releases');
 
-gulp.task('clean:dist', function (cb) {
-  del(config.buildDir, cb);
-});
+var compileTasks = (function () {
+  var tasks = ['templates', 'scripts', 'styles', 'assets:dist'];
 
-gulp.task('compile:dist', ['templates', 'scripts', 'styles', 'assets:dist'], function () {
-  var assets = useref.assets({searchPath: ['.', config.destDir]});
+  if (config.fsdk) {
+    tasks.unshift(['sdk:compile'])
+  }
+
+  return tasks;
+})();
+
+gulp.task('compile', gulpsync.sync(compileTasks), function () {
+  var jsFilter = filter('*.js', {restore: true});
+  var cssFilter = filter('*.css', {restore: true});
+  var htmlFilter = filter('**/*.html', {restore: true});
+  var notIndexFilter = filter(['**/*.*', '!**/*.html'], {restore: true});
 
   return gulp.src(config.destDir + '/**/*.html')
-    .pipe(assets)
-    .pipe(gulpif('*.js', uglify(), rev() ))
-    .pipe(gulpif('*.css', minifyCss(), rev() ))
-    .pipe(assets.restore())
-    .pipe(useref())
-    .pipe(revReplace())
-    .pipe(gulpif('*.html', minifyHtml({
+    .pipe(useref({
+      searchPath: ['.', config.destDir]
+    }))
+    // minify js file
+    .pipe(jsFilter)
+    .pipe(uglify())
+    .pipe(jsFilter.restore)
+
+    // minify css file
+    .pipe(cssFilter)
+    .pipe(minifyCss())
+    .pipe(cssFilter.restore)
+
+    // minify html file
+    .pipe(htmlFilter)
+    .pipe(minifyHtml({
       empty: true,
       spare: true
-    })))
-    .pipe(gulp.dest(config.buildDir));
+    }))
+    .pipe(htmlFilter.restore)
+
+    // rename js and css file
+    .pipe(notIndexFilter)
+    .pipe(rev())
+    .pipe(notIndexFilter.restore)
+
+    .pipe(revReplace())
+
+    .pipe(gulp.dest(config.getReleasePath()));
 });
 
-gulp.task('build', ['clean:dist'], function () {
-
-  return gulp.start([
+gulp.task('build', function () {
+  var buildTasks = [
     'fonts:dist',
     'images:dist',
     'ngConfig',
-    'compile:dist',
-    'robotstxt'
-  ], function () {
-    del('.tmp');
+    'robotstxt',
+    'compile'
+  ];
+
+  return gulp.start(buildTasks, function (done) {
+    releases.create(done);
+    del(config.destDir);
   });
 
 });

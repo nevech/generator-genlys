@@ -27,7 +27,7 @@ gulp.task('fonts:watch', function () {
 
   return gulp.src(glob)
     .pipe(watch(glob, {verbose: true}))
-    .pipe(gulp.dest(config.buildDir + '/fonts'))
+    .pipe(gulp.dest(config.getReleasePath() + '/fonts'))
     .pipe(reload({stream: true}));
 });
 
@@ -35,5 +35,5 @@ gulp.task('fonts:dist', function () {
   var glob = getGlobFonts();
 
   return gulp.src(glob)
-    .pipe(gulp.dest(config.buildDir + '/fonts'));
+    .pipe(gulp.dest(config.getReleasePath() + '/fonts'));
 });

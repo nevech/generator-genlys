@@ -17,7 +17,7 @@
     "browser-sync": "^2.6.4",
     "connect-modrewrite": "^0.8.1",
     "del": "^2.2.0",
-    "fs-symlink": "^1.2.0",
+    "fs-symlink": "^1.2.1",
     "fsdk": "^1.0.0",
     "git-guppy": "^1.0.0",
     "gulp": "^3.9.0",

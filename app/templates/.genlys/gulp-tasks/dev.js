@@ -16,16 +16,18 @@ var serveTasks = [
   'ngConfig'
 ];
 
-gulp.task('clean:serve', function (cb) {
-  del(config.destDir, cb);
+gulp.task('clean:tmp', function (done) {
+  del(config.destDir).then(function () {
+    done();
+  });
 });
 
-gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
+gulp.task('dev', gulpsync.sync(['clean:tmp', serveTasks]), function () {
   browserSync.init({
     notify: false,
     port: config.port,
     server: {
-      baseDir: ['.tmp'],
+      baseDir: [config.destDir],
       routes: {
         '/bower_components': 'bower_components'
       },
@@ -37,25 +39,25 @@ gulp.task('serve', gulpsync.sync(['clean:serve', serveTasks]), function () {
     }
   });
 
-  gulp.start([
+  var tasks = [
     'styles:watch',
     'templates:watch',
     'scripts:watch',
     'images:watch',
     'fonts:watch',
     'assets:watch'
-  ]);
+  ];
+
+  if (config.fsdk) {
+    tasks.push('sdk:watch');
+  }
+
+  gulp.start(tasks);
 
   gulp.watch('bower.json', ['wiredep', 'fonts', browserSync.reload]);
 });
 
-
-gulp.task('serve:dist', function () {
-  browserSync.init({
-    notify: false,
-    port: config.port,
-    server: {
-      baseDir: ['dist'],
-    }
-  });
+gulp.task('serve', function () {
+  console.log('Task `serve` is deprecated and will be removed in v1.0.0. Use `dev` task.');
+  gulp.start('dev');
 });

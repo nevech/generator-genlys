@@ -1,19 +1,26 @@
-var fs = require('fs');
 var gulp = require('gulp');
-var gulpsync = require('gulp-sync')(gulp);
-var gulpif = require('gulp-if');
 var jade = require('gulp-jade');
-var lazypipe = require('lazypipe');
-
-var browserSync = require('../browser-sync');
+var filter = require('gulp-filter');
+var watch = require('gulp-watch');
 var wiredep = require('wiredep').stream;
 
+var reload = require('../browser-sync').reload;
 var config = require('../config');
 
 var jadeOptions = {
   pretty: true,
   locals: config.getConstants('jade')
 };
+
+function templatesStream (dest) {
+  var jadeFilter = filter('**/*.jade', {restore: true});
+
+  return gulp.src(config.paths.templates)
+    .pipe(jadeFilter)
+    .pipe(jade(jadeOptions))
+    .pipe(jadeFilter.restore)
+    .pipe(gulp.dest(dest));
+}
 
 gulp.task('wiredep', function () {
   return gulp.src('app/index.jade')
@@ -25,27 +32,24 @@ gulp.task('wiredep', function () {
 });
 
 gulp.task('templates', ['wiredep'], function () {
-  return gulp.src(config.paths.templates)
-    .pipe(gulpif('*.jade', jade(jadeOptions)))
-    .pipe(gulp.dest(config.destDir));
+  return templatesStream(config.destDir)
 });
 
-gulp.task('html', function () {
-  return gulp.src(config.paths.html)
-    .pipe(gulp.dest(config.destDir));
-});
-
-gulp.task('jade', function () {
-  return gulp.src(config.paths.jade)
-    .pipe(jade(jadeOptions))
-    .pipe(gulp.dest(config.destDir));
+gulp.task('templates:dist', ['wiredep'], function () {
+  return templatesStream(config.getReleasePath())
 });
 
 gulp.task('templates:watch', function  () {
-  gulp.watch(config.paths.html, ['html']);
-  gulp.watch(config.paths.jade, ['jade']);
+  var jadeFilter = filter('**/*.jade', {restore: true});
+  var src = config.paths.templates;
 
-  gulp.watch(".tmp/*.html").on('change', function (argument) {
-    browserSync.reload();
-  });
+  return gulp.src(src)
+    .pipe(watch(src, {verbose: true}))
+
+    .pipe(jadeFilter)
+    .pipe(jade(jadeOptions))
+    .pipe(jadeFilter.restore)
+
+    .pipe(gulp.dest(config.destDir))
+    .pipe(reload({stream: true}));
 });

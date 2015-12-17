@@ -1,6 +1,6 @@
 .DS_Store
 .idea
-.tmp
 node_modules
-dist
 bower_components
+releases
+npm-debug.log
