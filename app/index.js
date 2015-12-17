@@ -132,6 +132,6 @@ module.exports = yeoman.generators.Base.extend({
 
   end: function () {
     this.log(chalk.yellow('Your project is generated! Happy working :)'));
-    this.log('Run ' + chalk.green('gulp serve') + ' for start developments');
+    this.log('Run ' + chalk.green('gulp dev') + ' for start developments');
   }
 });
