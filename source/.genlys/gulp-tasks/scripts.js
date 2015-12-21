@@ -36,6 +36,14 @@ var ngConfigTasks = lazypipe()
     return gulp.dest(config.destDir + '/scripts/configs')
   });
 
+function ngConfigStream (dest) {
+  var src = config.getPathToNgConfig();
+
+  return gulp.src(src)
+    .pipe(ngConfigTasks())
+    .pipe(gulp.dest(dest + '/scripts/configs'));
+}
+
 function scriptsStream (dest) {
   var coffeeFilter = filter('**/*.coffee', {restore: true});
   var jsFilter = filter('**/*.js', {restore: true});
@@ -56,15 +64,16 @@ gulp.task('scripts', function () {
   return scriptsStream(config.destDir);
 });
 
-gulp.task('scripts:dist', function () {
+gulp.task('scripts:dist', ['ngConfig:dist'], function () {
   return scriptsStream(config.getReleasePath());
 });
 
 gulp.task('ngConfig', function () {
-  var src = config.getPathToNgConfig();
+  return ngConfigStream(config.destDir);
+});
 
-  return gulp.src(src)
-    .pipe(ngConfigTasks());
+gulp.task('ngConfig:dist', function () {
+  return ngConfigStream(config.getReleasePath());
 });
 
 gulp.task('ngConfig:watch', function () {
@@ -73,6 +82,7 @@ gulp.task('ngConfig:watch', function () {
   return gulp.src(src)
     .pipe(watch(src, watchOptions))
     .pipe(ngConfigTasks())
+    .pipe(gulp.dest(config.destDir + '/scripts/configs'))
     .pipe(reload({stream: true}));
 });
 

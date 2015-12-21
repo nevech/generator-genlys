@@ -26,7 +26,27 @@ var compileTasks = (function () {
   return tasks;
 })();
 
-gulp.task('compile', gulpsync.sync(compileTasks), function () {
+var buildTasks = (function () {
+  var tasks = ['fonts:dist', 'images:dist', 'robotstxt'];
+
+  if (config.isCompressFiles()) {
+    tasks.push('ngConfig', ['compress']);
+  } else {
+    tasks.push('scripts:dist', 'styles:dist', 'templates:dist', 'bower:dist');
+  }
+
+  return tasks;
+})();
+
+gulp.task('bower:dist', function () {
+  var src = 'bower_components/**/*.*';
+  var dist = config.getReleasePath() + '/bower_components';
+
+  return gulp.src(src)
+    .pipe(gulp.dest(dist));
+});
+
+gulp.task('compress', gulpsync.sync(compileTasks), function () {
   var jsFilter = filter('*.js', {restore: true});
   var cssFilter = filter('*.css', {restore: true});
   var htmlFilter = filter('**/*.html', {restore: true});
@@ -64,18 +84,7 @@ gulp.task('compile', gulpsync.sync(compileTasks), function () {
     .pipe(gulp.dest(config.getReleasePath()));
 });
 
-gulp.task('build', function () {
-  var buildTasks = [
-    'fonts:dist',
-    'images:dist',
-    'ngConfig',
-    'robotstxt',
-    'compile'
-  ];
-
-  return gulp.start(buildTasks, function (done) {
-    releases.create(done);
-    del(config.destDir);
-  });
-
+gulp.task('build', gulpsync.sync(buildTasks), function (done) {
+  releases.create(done);
+  del(config.destDir);
 });
