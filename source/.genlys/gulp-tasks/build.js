@@ -27,7 +27,7 @@ var compileTasks = (function () {
 })();
 
 var buildTasks = (function () {
-  var tasks = ['fonts:dist', 'images:dist', 'robotstxt'];
+  var tasks = ['fonts:dist', 'images:dist', 'robotstxt', 'assets:dist'];
 
   if (config.isCompressFiles()) {
     tasks.push('ngConfig', ['compress']);
