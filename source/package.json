@@ -53,6 +53,7 @@
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
     "wiredep": "^3.0.0",
-    "yargs": "^3.8.0"
+    "yargs": "^3.8.0",
+    "jsdoc": "^3.8.0"
   }
 }
