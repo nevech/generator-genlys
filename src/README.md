@@ -1,4 +1,4 @@
-# <%= options.appName %>
+# Simple app
 
 ## Dependencies
 
