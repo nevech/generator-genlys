@@ -16,7 +16,7 @@ gulp.task('docs', gulpsync.sync(['clean:tmp', 'clean:docs', ['scripts']]), funct
       '-c node_modules/angular-jsdoc/common/conf.json '+   // config file
       '-t node_modules/angular-jsdoc/angular-template '+   // template file
       '-d jsdocs '+                                          // output directory
-      '../README.md ' +                                    // to include README.md as index contents
+      'README.md ' +                                    // to include README.md as index contents
       '-r ' + config.destDir + '/scripts '+                // source code directory
       '--verbose'                                          // Log detailed information to the console as JSDoc runs
   ]));
