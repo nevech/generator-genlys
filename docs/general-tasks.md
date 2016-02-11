@@ -14,7 +14,6 @@ To make a production-ready build of the app run:
 $ gulp build
 ```
 
-# General tasks
 To start generation js documentation:
 
 ```sh
