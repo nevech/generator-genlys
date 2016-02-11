@@ -15,7 +15,7 @@ $ gulp build
 ```
 
 # General tasks
-To start generation js documentation (folder app/jsdocs):
+To start generation js documentation:
 
 ```sh
 $ gulp docs
