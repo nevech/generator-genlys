@@ -12,12 +12,13 @@ var revReplace = require('gulp-rev-replace');
 var fs = require('fs');
 var map = require('gulp-map');
 var filter = require('gulp-filter');
+var shell = require('gulp-shell');
 
 var config = require('../config');
 var releases = require('../libs/releases');
 
 var compileTasks = (function () {
-  var tasks = ['templates', 'scripts', 'styles', 'assets:dist'];
+  var tasks = ['templates', 'scripts', 'styles', 'assets:dist', ['docs']];
 
   if (config.fsdk) {
     tasks.unshift(['sdk:compile'])
@@ -62,6 +63,18 @@ gulp.task('compile', gulpsync.sync(compileTasks), function () {
     .pipe(revReplace())
 
     .pipe(gulp.dest(config.getReleasePath()));
+});
+
+gulp.task('docs', function() {
+  return gulp.task('docs', shell.task([
+    'node_modules/jsdoc/jsdoc.js '+
+      '-c node_modules/angular-jsdoc/common/conf.json '+   // config file
+      '-t node_modules/angular-jsdoc/angular-template '+   // template file
+      '-r app/scripts/directives ' + // source code directory
+      '-d dist/docs '+                           // output directory
+      './README.md ' +                            // to include README.md as index contents
+      '-r .tmp/scripts'                    // source code directory
+  ]));
 });
 
 gulp.task('build', function () {
