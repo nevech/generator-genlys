@@ -13,3 +13,10 @@ To make a production-ready build of the app run:
 ```sh
 $ gulp build
 ```
+
+# General tasks
+To start generation js documentation (folder app/jsdocs):
+
+```sh
+$ gulp docs
+```
