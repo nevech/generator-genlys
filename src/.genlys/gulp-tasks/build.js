@@ -18,16 +18,16 @@ var releases = require('../libs/releases');
 
 var compileTasks = (function () {
   var tasks = ['templates', 'scripts', 'styles', 'assets:dist'];
-
-  if (config.fsdk) {
-    tasks.unshift(['sdk:compile'])
-  }
-
   return tasks;
+
 })();
 
 var buildTasks = (function () {
   var tasks = ['fonts:dist', 'images:dist', 'robotstxt', 'assets:dist'];
+
+  if (config.fsdk) {
+    tasks.unshift(['sdk:compile'])
+  }
 
   if (config.isCompressFiles()) {
     tasks.push('ngConfig', ['compress']);
