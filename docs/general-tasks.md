@@ -13,3 +13,9 @@ To make a production-ready build of the app run:
 ```sh
 $ gulp build
 ```
+
+To start generation js documentation:
+
+```sh
+$ gulp docs
+```
