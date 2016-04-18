@@ -8,15 +8,15 @@ var configENV = config.environments[config.env];
 function getConfigENV (name, defaultValue) {
   var defaultValue = defaultValue || true;
 
-  if (!configENV || configENV[name] == undefined) {
+  if (!configENV || configENV[name] === undefined) {
     return defaultValue;
   }
 
   return configENV[name];
 }
 
-config.isCompressCSS = function () {
-  return getConfigENV('compileFiles');
+config.isCompressFiles = function () {
+  return !!getConfigENV('compressFiles', true);
 };
 
 config.getPathToNgConfig = function () {
