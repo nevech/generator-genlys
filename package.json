@@ -1,6 +1,6 @@
 {
   "name": "generator-genlys",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Yeoman generator genlys",
   "license": "MIT",
   "main": "app/index.js",
