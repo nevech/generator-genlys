@@ -26,7 +26,7 @@ gulp.task('wiredep', function () {
   return gulp.src('app/index.jade')
     .pipe(wiredep({
       directory: './bower_components',
-      ignorePath: /^(\.\.\/)*\.\./
+      ignorePath: /^(\.\.\/)*\.\.\//
     }))
     .pipe(gulp.dest('app'));
 });
