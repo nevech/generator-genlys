@@ -1,32 +1,25 @@
 var gulp = require('gulp');
 var gulpsync = require('gulp-sync')(gulp);
 var del = require('del');
-var symlink = require('fs-symlink');
-var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var rev = require('gulp-rev');
 var useref = require('gulp-useref');
 var minifyHtml = require('gulp-minify-html');
-var minifyCss = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 var revReplace = require('gulp-rev-replace');
-var fs = require('fs');
 var map = require('gulp-map');
 var filter = require('gulp-filter');
 
 var config = require('../config');
 var releases = require('../libs/releases');
 
-var compileTasks = (function () {
-  var tasks = ['templates', 'scripts', 'styles', 'assets:dist'];
-  return tasks;
-
-})();
+var compileTasks = ['templates', 'scripts', 'styles', 'assets:dist'];
 
 var buildTasks = (function () {
   var tasks = ['fonts:dist', 'images:dist', 'robotstxt', 'assets:dist'];
 
   if (config.fsdk) {
-    tasks.unshift(['sdk:compile'])
+    tasks.unshift(['sdk:compile']);
   }
 
   if (config.isCompressFiles()) {
@@ -47,8 +40,8 @@ gulp.task('bower:dist', function () {
 });
 
 gulp.task('compress', gulpsync.sync(compileTasks), function () {
-  var jsFilter = filter('*.js', {restore: true});
-  var cssFilter = filter('*.css', {restore: true});
+  var jsFilter = filter('**/*.js', {restore: true});
+  var cssFilter = filter('**/*.css', {restore: true});
   var htmlFilter = filter('**/*.html', {restore: true});
   var notIndexFilter = filter(['**/*.*', '!**/*.html'], {restore: true});
 
@@ -63,7 +56,7 @@ gulp.task('compress', gulpsync.sync(compileTasks), function () {
 
     // minify css file
     .pipe(cssFilter)
-    .pipe(minifyCss())
+    .pipe(cleanCSS())
     .pipe(cssFilter.restore)
 
     // minify html file
