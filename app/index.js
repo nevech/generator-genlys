@@ -121,7 +121,7 @@ module.exports = yeoman.generators.Base.extend({
       this.directory('styles', 'app/styles');
       this.directory('views', 'app/views');
 
-      this.copy('index.jade', 'app/index.jade');
+      this.copy('index.pug', 'app/index.pug');
     }
 
   },
