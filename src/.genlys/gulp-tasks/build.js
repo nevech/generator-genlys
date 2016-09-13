@@ -13,7 +13,7 @@ var filter = require('gulp-filter');
 var config = require('../config');
 var releases = require('../libs/releases');
 
-var compileTasks = ['templates', 'scripts', 'styles', 'assets:dist'];
+var compileTasks = ['templates', 'templateCache', 'scripts', 'styles', 'assets:dist'];
 
 var buildTasks = (function () {
   var tasks = ['fonts:dist', 'images:dist', 'robotstxt', 'assets:dist'];
@@ -25,7 +25,7 @@ var buildTasks = (function () {
   if (config.isCompressFiles()) {
     tasks.push('ngConfig', ['compress']);
   } else {
-    tasks.push('scripts:dist', 'styles:dist', 'templates:dist', 'bower:dist');
+    tasks.push('scripts:dist', 'styles:dist', 'templates:dist', 'templateCache:dist', 'bower:dist');
   }
 
   return tasks;

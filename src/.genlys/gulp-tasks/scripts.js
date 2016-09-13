@@ -6,12 +6,18 @@ var rename = require('gulp-rename');
 var ngConfig = require('gulp-ng-config');
 var ngAnnotate = require('gulp-ng-annotate');
 var lazypipe = require('lazypipe');
+var babel = require('gulp-babel');
+var iife = require('gulp-iife');
 
 var config = require('../config');
 var reload = require('../browser-sync').reload;
 
 var coffeeOptions = {
   bare: true
+};
+
+var babelOptions = {
+  presets: ['es2015']
 };
 
 var watchOptions = {
@@ -49,13 +55,17 @@ function scriptsStream (dest) {
   var jsFilter = filter('**/*.js', {restore: true});
 
   return gulp.src(config.paths.scripts)
-    .pipe(coffeeFilter)
-    .pipe(coffee(coffeeOptions))
-    .pipe(coffeeFilter.restore)
 
     .pipe(jsFilter)
+    .pipe(babel(babelOptions))
     .pipe(ngAnnotate())
+    .pipe(iife({useStrict: false}))
     .pipe(jsFilter.restore)
+
+    .pipe(coffeeFilter)
+    .pipe(coffee(coffeeOptions))
+    .pipe(ngAnnotate())
+    .pipe(coffeeFilter.restore)
 
     .pipe(gulp.dest(dest));
 }
@@ -96,13 +106,16 @@ gulp.task('scripts:watch', function () {
   return gulp.src(src)
     .pipe(watch(src, watchOptions))
 
+    .pipe(jsFilter)
+    .pipe(babel(babelOptions))
+    .pipe(ngAnnotate())
+    .pipe(iife({useStrict: false}))
+    .pipe(jsFilter.restore)
+
     .pipe(coffeeFilter)
     .pipe(coffee(coffeeOptions))
-    .pipe(coffeeFilter.restore)
-
-    .pipe(jsFilter)
     .pipe(ngAnnotate())
-    .pipe(jsFilter.restore)
+    .pipe(coffeeFilter.restore)
 
     .pipe(gulp.dest(config.destDir))
     .pipe(reload({stream: true}));

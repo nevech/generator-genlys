@@ -1,16 +1,20 @@
-var gulp = require('gulp');
-var del = require('del');
-var gulpsync = require('gulp-sync')(gulp);
-var modRewrite  = require('connect-modrewrite');
+'use strict';
 
-var browserSync = require('../browser-sync');
-var config = require('../config');
+let gulp = require('gulp');
+let del = require('del');
+let gulpsync = require('gulp-sync')(gulp);
+let modRewrite  = require('connect-modrewrite');
+let plumber = require('gulp-plumber');
 
-var serveTasks = [
+let browserSync = require('../browser-sync');
+let config = require('../config');
+
+let serveTasks = [
   'assets',
   'fonts',
   'images',
   'templates',
+  'templateCache',
   'styles',
   'scripts',
   'ngConfig'
@@ -22,7 +26,17 @@ gulp.task('clean:tmp', function (done) {
   });
 });
 
-gulp.task('dev', gulpsync.sync(['clean:tmp', serveTasks]), function () {
+gulp.task('apply-plumber', function (done) {
+  let gulpsrc = gulp.src;
+
+  gulp.src = function() {
+    return gulpsrc.apply(gulp, arguments).pipe(plumber());
+  };
+
+  done();
+});
+
+gulp.task('dev', gulpsync.sync(['apply-plumber', 'clean:tmp', serveTasks]), function () {
   browserSync.init({
     notify: false,
     port: config.port,
@@ -39,9 +53,10 @@ gulp.task('dev', gulpsync.sync(['clean:tmp', serveTasks]), function () {
     }
   });
 
-  var tasks = [
+  let tasks = [
     'styles:watch',
     'templates:watch',
+    'templateCache:watch',
     'scripts:watch',
     'images:watch',
     'fonts:watch',

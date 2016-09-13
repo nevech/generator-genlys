@@ -66,7 +66,11 @@ module.exports = {
       'app/public/**/*',
       '!app/public/images',
       '!app/public/fonts',
+    ],
+    'templateCache': [
+      'views/components/**/*.html',
+      'views/directives/**/*.html'
     ]
-  },
+  }
 
 };

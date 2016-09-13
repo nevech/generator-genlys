@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var guppy = require('git-guppy')(gulp);
 var coffeelint = require('gulp-coffeelint');
 var config = require('../config');
 var path = require('path');
@@ -12,5 +11,3 @@ gulp.task('lint', function () {
     .pipe(coffeelint.reporter('coffeelint-stylish'))
     .pipe(coffeelint.reporter('fail'));
 });
-
-gulp.task('pre-commit', ['lint']);

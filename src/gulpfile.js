@@ -1,12 +1,19 @@
-var gulp = require('gulp');
-var plumber = require('gulp-plumber');
+'use strict';
+
+let gulp = require('gulp');
+let Core = require('./.genlys/classes')
 
 // require all task from gulp-tasks dir
 require('require-dir')('./.genlys/gulp-tasks');
 
-// apply gulp-plumber for all tasks
-var _gulpsrc = gulp.src;
-gulp.src = function() {
-  return _gulpsrc.apply(gulp, arguments)
-    .pipe(plumber());
-};
+gulp.task('templates', Core.Templates.getTask('tmp'));
+gulp.task('templates:dist', Core.Templates.getTask('release'));
+gulp.task('templates:watch', Core.Templates.getTask('tmp', true));
+
+gulp.task('templateCache', ['templates'], Core.TemplateCache.getTask('tmp'));
+gulp.task('templateCache:dist', ['templates:dist'], Core.TemplateCache.getTask('release'));
+gulp.task('templateCache:watch', Core.TemplateCache.getTask('tmp', true));
+
+gulp.task('images', Core.Images.getTask('tmp'));
+gulp.task('images:dist', Core.Images.getTask('release'));
+gulp.task('images:watch', Core.Images.getTask('tmp', true));
