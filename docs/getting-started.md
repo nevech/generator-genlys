@@ -37,10 +37,10 @@ app/
 ├─── styles/
 │  └─── main.styl
 ├─── views/
-│  └─── home.jade
+│  └─── home.pug
 ├─── configs/
-│  └─── home.jade
-└─── index.jade
+│  └─── home.pug
+└─── index.pug
 ```
 
 All files in `app/public` directory are copied to the root of the build.
