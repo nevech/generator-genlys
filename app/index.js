@@ -1,9 +1,9 @@
 'use strict';
-var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var mkdirp = require('mkdirp');
-var _ = require('lodash');
+let yeoman = require('yeoman-generator');
+let chalk = require('chalk');
+let yosay = require('yosay');
+let mkdirp = require('mkdirp');
+let _ = require('lodash');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
@@ -11,13 +11,13 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   prompting: function () {
-    var done = this.async();
+    let done = this.async();
 
     this.log(yosay(
       'Welcome to the exceptional ' + chalk.green('Genlys') + ' generator!'
     ));
 
-    var prompts = [{
+    let prompts = [{
       type: 'input',
       name: 'appName',
       message: 'Enter project name',
@@ -29,7 +29,7 @@ module.exports = yeoman.generators.Base.extend({
       default: true
     }];
 
-    this.prompt(prompts, function (answers) {
+    return this.prompt(prompts).then((answers) => {
       this.options = answers;
       this.options.appName = _.camelCase(answers.appName);
 
@@ -56,8 +56,8 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     bower: function () {
-      var angularVersion = '1.5.3';
-      var bower = {
+      let angularVersion = '1.6.0';
+      let bower = {
         name: this.options.appName,
         version: '0.0.0',
         dependencies: {
@@ -65,7 +65,7 @@ module.exports = yeoman.generators.Base.extend({
           'angular-resource': '^' + angularVersion,
           'angular-cookies': '^' + angularVersion,
           'angular-route': '^' + angularVersion,
-          'normalize.css': '^3.0.2'
+          'normalize.css': '^5.0.0'
         },
         resolutions: {
           'angular': '>=' + angularVersion
@@ -81,9 +81,9 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     packageJSON: function () {
-      var packageFile = require(this.sourceRoot() + '/_package.json');
+      let packageFile = require(this.sourceRoot() + '/_package.json');
 
-      var packageJSON = {
+      let packageJSON = {
         name: this.options.appName,
         description: this.options.appName,
         version: '0.0.0',
