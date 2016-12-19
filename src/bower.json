@@ -2,15 +2,15 @@
   "name": "MyApp",
   "version": "0.0.1",
   "dependencies": {
-    "angular": "~1.4.8",
-    "angular-animate": "~1.4.8",
-    "angular-resource": "~1.4.8",
-    "angular-cookies": "~1.4.8",
-    "angular-route": "~1.4.8",
+    "angular": "~1.5.0",
+    "angular-animate": "~1.5.0",
+    "angular-resource": "~1.5.0",
+    "angular-cookies": "~1.5.0",
+    "angular-route": "~1.5.0",
     "underscore": "1.8.2",
-    "normalize.css": "~3.0.2"
+    "normalize.css": "~5.0.0"
   },
   "resolutions": {
-    "angular": ">=1.4.8"
+    "angular": ">=1.5.0"
   }
 }

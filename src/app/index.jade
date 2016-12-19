@@ -16,10 +16,9 @@ html(ng-app="genlys")
 
     link(rel="stylesheet", href="styles/main.css")
     link(rel="stylesheet", href="styles/home.css")
-    link(rel="stylesheet", href="sdk/styles/test.css")
     // endbuild
 
-  body(ng-controller="GlobalCtrl")
+  body(ng-controller="RootCtrl as root")
     div#wrapper(ng-view)
 
     // build:js scripts/main.js
@@ -42,8 +41,7 @@ html(ng-app="genlys")
 
     script(src='scripts/factories/page.js')
 
-    script(src='scripts/controllers/global.js')
+    script(src='scripts/controllers/root.js')
     script(src='scripts/controllers/home.js')
-
-    script(src='sdk/scripts/test.js')
     // endbuild
+    

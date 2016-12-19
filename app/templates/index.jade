@@ -16,7 +16,7 @@ html(ng-app="<%= options.appName %>")
     link(rel="stylesheet", href="/styles/home.css")
     // endbuild
 
-  body(ng-controller="GlobalCtrl")
+  body(ng-controller="GlobalCtrl as root")
     div#wrapper(ng-view)
 
     // build:js scripts/main.js
