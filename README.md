@@ -7,7 +7,7 @@
 * MVC project structure
 * Includes basic dependence for Angular
 * Configuring application
-* Automatically compile [Jade](jade-lang.com), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
+* Automatically compile [Pug](pugjs.org), [Stylus](https://learnboost.github.io/stylus/), [CoffeeScript](http://coffeescript.org/)
 * Automatically wire-up dependencies installed with [Bower](http://bower.io/)
 * Built-in preview server with [BrowserSync](http://www.browsersync.io/)
 * CSS Autoprefixing

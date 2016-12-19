@@ -3,7 +3,7 @@ var path = require('path');
 var fsdk = require('fsdk');
 var watch = require('gulp-watch');
 var filter = require('gulp-filter');
-var jade = require('gulp-jade');
+var pug = require('gulp-pug');
 var stylus = require('gulp-stylus');
 var coffee = require('gulp-coffee');
 
@@ -11,15 +11,15 @@ var reload = require('../browser-sync').reload;
 var config = require('../config');
 
 var fsdkConfig = config.fsdk;
-var jadeOptions = {
+var pugOptions = {
   pretty: true,
-  locals: config.getConstants('jade')
+  locals: config.getConstants('pug')
 };
 
 gulp.task('sdk:compile', function () {
   var coffeeFilter = filter('**/*.coffee', {restore: true});
   var stylusFilter = filter('**/*.styl', {restore: true});
-  var jadeFilter = filter('**/*.jade', {restore: true});
+  var pugFilter = filter('**/*.pug', {restore: true});
   var dest = path.resolve(config.getReleasePath(), fsdkConfig.dest);
 
   return gulp.src(fsdkConfig.src)
@@ -35,10 +35,10 @@ gulp.task('sdk:compile', function () {
     .pipe(stylus())
     .pipe(stylusFilter.restore)
 
-    // Jade filter
-    .pipe(jadeFilter)
-    .pipe(jade(jadeOptions))
-    .pipe(jadeFilter.restore)
+    // Pug filter
+    .pipe(pugFilter)
+    .pipe(pug(pugOptions))
+    .pipe(pugFilter.restore)
 
     .pipe(gulp.dest(dest));
 });
@@ -46,7 +46,7 @@ gulp.task('sdk:compile', function () {
 gulp.task('sdk:watch', function () {
   var coffeeFilter = filter('**/*.coffee', {restore: true});
   var stylusFilter = filter('**/*.styl', {restore: true});
-  var jadeFilter = filter('**/*.jade', {restore: true});
+  var pugFilter = filter('**/*.pug', {restore: true});
   var dest = path.resolve(config.destDir, fsdkConfig.dest);
 
   return gulp.src(fsdkConfig.src)
@@ -63,10 +63,10 @@ gulp.task('sdk:watch', function () {
     .pipe(stylus())
     .pipe(stylusFilter.restore)
 
-    // Jade filter
-    .pipe(jadeFilter)
-    .pipe(jade(jadeOptions))
-    .pipe(jadeFilter.restore)
+    // Pug filter
+    .pipe(pugFilter)
+    .pipe(pug(pugOptions))
+    .pipe(pugFilter.restore)
 
     .pipe(gulp.dest(dest))
     .pipe(reload({stream: true}));

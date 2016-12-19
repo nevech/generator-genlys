@@ -20,7 +20,7 @@
     "yeoman-generator",
     "web",
     "front-end",
-    "jade",
+    "pug",
     "stylus",
     "coffee",
     "gulp",

@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var jade = require('gulp-jade');
+var pug = require('gulp-pug');
 var filter = require('gulp-filter');
 var watch = require('gulp-watch');
 var wiredep = require('wiredep').stream;
@@ -7,23 +7,23 @@ var wiredep = require('wiredep').stream;
 var reload = require('../browser-sync').reload;
 var config = require('../config');
 
-var jadeOptions = {
+var pugOptions = {
   pretty: true,
-  locals: config.getConstants('jade')
+  locals: config.getConstants('pug')
 };
 
 function templatesStream (dest) {
-  var jadeFilter = filter('**/*.jade', {restore: true});
+  var pugFilter = filter('**/*.pug', {restore: true});
 
   return gulp.src(config.paths.templates)
-    .pipe(jadeFilter)
-    .pipe(jade(jadeOptions))
-    .pipe(jadeFilter.restore)
+    .pipe(pugFilter)
+    .pipe(pug(pugOptions))
+    .pipe(pugFilter.restore)
     .pipe(gulp.dest(dest));
 }
 
 gulp.task('wiredep', function () {
-  return gulp.src('app/index.jade')
+  return gulp.src('app/index.pug')
     .pipe(wiredep({
       directory: './bower_components',
       ignorePath: /^(\.\.\/)*\.\.\//
@@ -40,15 +40,15 @@ gulp.task('templates:dist', ['wiredep'], function () {
 });
 
 gulp.task('templates:watch', function  () {
-  var jadeFilter = filter('**/*.jade', {restore: true});
+  var pugFilter = filter('**/*.pug', {restore: true});
   var src = config.paths.templates;
 
   return gulp.src(src)
     .pipe(watch(src, {verbose: true}))
 
-    .pipe(jadeFilter)
-    .pipe(jade(jadeOptions))
-    .pipe(jadeFilter.restore)
+    .pipe(pugFilter)
+    .pipe(pug(pugOptions))
+    .pipe(pugFilter.restore)
 
     .pipe(gulp.dest(config.destDir))
     .pipe(reload({stream: true}));
