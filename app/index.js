@@ -3,7 +3,7 @@ let yeoman = require('yeoman-generator');
 let chalk = require('chalk');
 let yosay = require('yosay');
 let mkdirp = require('mkdirp');
-let _ = require('lodash');
+let upperCamelCase = require('uppercamelcase');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
@@ -31,7 +31,7 @@ module.exports = yeoman.generators.Base.extend({
 
     return this.prompt(prompts).then((answers) => {
       this.options = answers;
-      this.options.appName = _.camelCase(answers.appName);
+      this.options.appName = upperCamelCase(answers.appName);
 
       done();
     }.bind(this));
