@@ -1,6 +1,7 @@
 'use strict';
 
 let pug = require('gulp-pug');
+let data = require('gulp-data');
 let filter = require('gulp-filter');
 let wiredep = require('wiredep').stream;
 let lazypipe = require('lazypipe');
@@ -11,11 +12,6 @@ let Base = require('./base');
 class Templates extends Base {
   constructor(dist) {
     super(dist, config.paths.templates);
-
-    this.pugOptions = {
-      pretty: true,
-      locals: config.getConstants('pug')
-    };
   }
 
   getStream() {
@@ -41,10 +37,13 @@ class Templates extends Base {
 
     return lazypipe()
       .pipe(() => pugFilter)
-      .pipe(pug, this.pugOptions)
+      .pipe(() => data(() => config.getConstants()))
+      .pipe(pug, {
+        pretty: true
+      })
       .pipe(() => pugFilter.restore)
 
-      .pipe(wiredepPipe)
+      .pipe(wiredepPipe);
   }
 
   static getLazypipeWiredep() {
