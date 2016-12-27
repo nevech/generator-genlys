@@ -21,4 +21,3 @@ gulp.task('docs', gulpsync.sync(['clean:tmp', 'clean:docs', ['scripts']]), funct
       '--verbose'                                          // Log detailed information to the console as JSDoc runs
   ]));
 });
-
