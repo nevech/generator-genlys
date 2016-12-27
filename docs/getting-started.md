@@ -23,17 +23,17 @@ app/
 │  └─── images/
 ├─── scripts/
 │  ├── configs/
-│  │  ├─── http.coffee
-│  │  ├─── routes.coffee
-│  │  └─── run.coffee
+│  │  ├─── http.js
+│  │  ├─── routes.js
+│  │  └─── run.js
 │  ├─── controllers/
-│  │  ├─── global.coffee
-│  │  └─── home.coffee
+│  │  ├─── root.js
+│  │  └─── home.js
 │  ├─── directives/
 │  ├─── factories/
-│  │  └─── page.coffee
+│  │  └─── page.js
 │  ├─── services/
-│  ├─── app.coffee
+│  ├─── app.js
 ├─── styles/
 │  └─── main.styl
 ├─── views/
