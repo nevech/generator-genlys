@@ -70,7 +70,8 @@ module.exports = {
     'templateCache': [
       'views/components/**/*.html',
       'views/directives/**/*.html'
-    ]
+    ],
+    'configs': 'configs/**/*.json'
   }
 
 };

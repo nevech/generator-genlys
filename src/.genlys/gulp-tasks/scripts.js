@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var watch = require('gulp-watch');
-var coffee = require('gulp-coffee');
 var filter = require('gulp-filter');
 var rename = require('gulp-rename');
 var ngConfig = require('gulp-ng-config');
@@ -11,10 +10,6 @@ var iife = require('gulp-iife');
 
 var config = require('../config');
 var reload = require('../browser-sync').reload;
-
-var coffeeOptions = {
-  bare: true
-};
 
 var babelOptions = {
   presets: ['es2015']
@@ -43,30 +38,16 @@ var ngConfigTasks = lazypipe()
   });
 
 function ngConfigStream (dest) {
-  var src = config.getPathToNgConfig();
-
-  return gulp.src(src)
+  return gulp.src(config.getPathToConstants())
     .pipe(ngConfigTasks())
     .pipe(gulp.dest(dest + '/scripts/configs'));
 }
 
 function scriptsStream (dest) {
-  var coffeeFilter = filter('**/*.coffee', {restore: true});
-  var jsFilter = filter('**/*.js', {restore: true});
-
   return gulp.src(config.paths.scripts)
-
-    .pipe(jsFilter)
     .pipe(babel(babelOptions))
     .pipe(ngAnnotate())
     .pipe(iife({useStrict: false}))
-    .pipe(jsFilter.restore)
-
-    .pipe(coffeeFilter)
-    .pipe(coffee(coffeeOptions))
-    .pipe(ngAnnotate())
-    .pipe(coffeeFilter.restore)
-
     .pipe(gulp.dest(dest));
 }
 
@@ -87,7 +68,7 @@ gulp.task('ngConfig:dist', function () {
 });
 
 gulp.task('ngConfig:watch', function () {
-  var src = config.getPathToNgConfig();
+  var src = config.getPathToConstants();
 
   return gulp.src(src)
     .pipe(watch(src, watchOptions))
@@ -97,8 +78,6 @@ gulp.task('ngConfig:watch', function () {
 });
 
 gulp.task('scripts:watch', function () {
-  var coffeeFilter = filter('**/*.coffee', {restore: true});
-  var jsFilter = filter('**/*.js', {restore: true});
   var src = config.paths.scripts;
 
   gulp.start('ngConfig:watch');
@@ -106,16 +85,9 @@ gulp.task('scripts:watch', function () {
   return gulp.src(src)
     .pipe(watch(src, watchOptions))
 
-    .pipe(jsFilter)
     .pipe(babel(babelOptions))
     .pipe(ngAnnotate())
     .pipe(iife({useStrict: false}))
-    .pipe(jsFilter.restore)
-
-    .pipe(coffeeFilter)
-    .pipe(coffee(coffeeOptions))
-    .pipe(ngAnnotate())
-    .pipe(coffeeFilter.restore)
 
     .pipe(gulp.dest(config.destDir))
     .pipe(reload({stream: true}));

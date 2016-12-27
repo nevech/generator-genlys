@@ -5,7 +5,6 @@ var watch = require('gulp-watch');
 var filter = require('gulp-filter');
 var pug = require('gulp-pug');
 var stylus = require('gulp-stylus');
-var coffee = require('gulp-coffee');
 
 var reload = require('../browser-sync').reload;
 var config = require('../config');
@@ -13,22 +12,16 @@ var config = require('../config');
 var fsdkConfig = config.fsdk;
 var pugOptions = {
   pretty: true,
-  locals: config.getConstants('pug')
+  locals: config.getConstants()
 };
 
 gulp.task('sdk:compile', function () {
-  var coffeeFilter = filter('**/*.coffee', {restore: true});
   var stylusFilter = filter('**/*.styl', {restore: true});
   var pugFilter = filter('**/*.pug', {restore: true});
   var dest = path.resolve(config.getReleasePath(), fsdkConfig.dest);
 
   return gulp.src(fsdkConfig.src)
     .pipe(fsdk.parseFile(fsdkConfig.env))
-
-    // CoffeeScript filter
-    .pipe(coffeeFilter)
-    .pipe(coffee({bare: true}))
-    .pipe(coffeeFilter.restore)
 
     // Stylus filter
     .pipe(stylusFilter)
@@ -44,7 +37,6 @@ gulp.task('sdk:compile', function () {
 });
 
 gulp.task('sdk:watch', function () {
-  var coffeeFilter = filter('**/*.coffee', {restore: true});
   var stylusFilter = filter('**/*.styl', {restore: true});
   var pugFilter = filter('**/*.pug', {restore: true});
   var dest = path.resolve(config.destDir, fsdkConfig.dest);
@@ -52,11 +44,6 @@ gulp.task('sdk:watch', function () {
   return gulp.src(fsdkConfig.src)
     .pipe(watch(fsdkConfig.src, {verbose: true}))
     .pipe(fsdk.parseFile(fsdkConfig.env))
-
-    // CoffeeScript filter
-    .pipe(coffeeFilter)
-    .pipe(coffee({bare: true}))
-    .pipe(coffeeFilter.restore)
 
     // Stylus filter
     .pipe(stylusFilter)

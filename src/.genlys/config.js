@@ -19,14 +19,16 @@ config.isCompressFiles = function () {
   return !!getConfigENV('compressFiles', true);
 };
 
-config.getPathToNgConfig = function () {
-  return 'configs/constants/angular/' + config.env + '.json';
+config.getConstants = function () {
+  let path = config.getPathToConstants();
+
+  return JSON.parse(fs.readFileSync(path, {
+    encoding: 'utf8'
+  }));
 };
 
-config.getConstants = function (from) {
-  var path = 'configs/constants/' + from + '/' + config.env + '.json';
-
-  return JSON.parse(fs.readFileSync(path, { encoding: 'utf8' }));
+config.getPathToConstants = function () {
+  return `configs/constants/${config.env}.json`;
 };
 
 config.getReleasePath = (function () {
