@@ -4,8 +4,8 @@
 
 ![](http://i.imgur.com/BTrI11y.png)
 ## Features
-* MVC project structure
-* Includes basic dependence for Angular
+* MVx project structure
+* Includes basic dependence for Angular@1.x
 * Configuring application
 * Automatically compile [Pug](https://pugjs.org), [Stylus](https://learnboost.github.io/stylus/), [Babel](https://babeljs.io/)
 * Automatically wire-up dependencies installed with [Bower](http://bower.io/)
