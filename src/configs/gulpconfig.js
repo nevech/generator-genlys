@@ -52,9 +52,7 @@ module.exports = {
   },
 
   'paths': {
-    'scripts': 'app/**/*.{js,coffee}',
-    'coffee': 'app/**/*.coffee',
-    'js': 'app/**/*.js',
+    'scripts': 'app/**/*.js',
     'templates': 'app/**/*.{pug,html}',
     'pug': 'app/**/*.pug',
     'html': 'app/**/*.html',

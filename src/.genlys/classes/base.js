@@ -37,6 +37,17 @@ class Base {
     return reload(options);
   }
 
+  getStream() {
+    return this.createStream()
+      .pipe(this.dest());
+  }
+
+  getStreamWithWatch() {
+    return this.createWatchStream()
+      .pipe(this.dest())
+      .pipe(this.reload());
+  }
+
   static getTask(dist, isWatch) {
     switch (dist) {
       case 'tmp':
