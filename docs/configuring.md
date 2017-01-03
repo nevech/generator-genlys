@@ -12,7 +12,7 @@ Constants gets from `configs/constants`.
 Connecting configs from command console:
 
 ```
-$ gulp dev --env=production
+$ gulp dev --env=staging
 ```
 
 or
