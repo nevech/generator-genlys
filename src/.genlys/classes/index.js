@@ -1,10 +1,9 @@
 'use strict';
 
-let Core = {
+module.exports = {
   Base: require('./base'),
   Templates: require('./templates'),
   TemplateCache: require('./template-cache'),
-  Images: require('./images')
-}
-
-module.exports = Core;
+  Images: require('./images'),
+  Assets: require('./assets')
+};

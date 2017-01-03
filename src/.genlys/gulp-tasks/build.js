@@ -31,14 +31,6 @@ var buildTasks = (function () {
   return tasks;
 })();
 
-gulp.task('bower:dist', function () {
-  var src = 'bower_components/**/*.*';
-  var dist = config.getReleasePath() + '/bower_components';
-
-  return gulp.src(src)
-    .pipe(gulp.dest(dist));
-});
-
 gulp.task('compress', gulpsync.sync(compileTasks), function () {
   var jsFilter = filter('**/*.js', {restore: true});
   var cssFilter = filter('**/*.css', {restore: true});
