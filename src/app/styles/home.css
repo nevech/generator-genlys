@@ -1,0 +1,30 @@
+#home {
+  a {
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: 300;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+  }
+
+  .welcome, .getting-started {
+    text-align: center;
+    font-weight: 400;
+    font-size: 40px;
+
+    p {
+      font-size: 30px;
+    }
+  }
+
+  .getting-started {
+    margin: 20px 0 0 0;
+  }
+
+  .logo {
+    text-align: center;
+  }
+}

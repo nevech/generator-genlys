@@ -56,8 +56,6 @@ module.exports = {
     'templates': 'app/**/*.{pug,html}',
     'pug': 'app/**/*.pug',
     'html': 'app/**/*.html',
-    'styles': 'app/**/*.{styl,css}',
-    'stylus': 'app/**/*.styl',
     'css': 'app/**/*.css',
     'images': 'app/public/images/**/*.{jpg,png,jpeg}',
     'assets': [
@@ -68,8 +66,7 @@ module.exports = {
     'templateCache': [
       'views/components/**/*.html',
       'views/directives/**/*.html'
-    ],
-    'configs': 'configs/**/*.json'
+    ]
   }
 
 };
